@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+    <h:head>
+        <title>Product Entry Form</title>
+    </h:head>
+    <h:body>
+        <h1>Product Entry</h1>
+
+        <h2>Add new product:</h2>
+
+        <h:messages />
+        <h:form onsubmit="return confirmSubmit()">
+            <fieldset>
+                <legend>Product Information</legend>
+                <h:outputLabel for="product-id" value="Product Id *"/>
+                <h:inputText id="product-id" value="#{productBean.product.id}" required="true"/>
+                <br/><br/>
+
+                <h:outputLabel for="name" value="Product Name"/>
+                <h:inputText id="name" value="#{productBean.product.name}" required="true"/>
+                <br/><br/>
+
+                <h:outputLabel for="price" value="Price"/>
+                <h:inputText id="price" value="#{productBean.product.price}" required="true"/>
+                <br/><br/>
+
+                <h:outputLabel for="stock" value="Stock Quantity"/>
+                <h:inputText id="stock" value="#{productBean.product.quantityOnHand}" required="true"/>
+                <br/><br/>
+
+                <h:commandButton value="Add Product" action="#{productBean.insert}"></h:commandButton>
+            </fieldset>
+        </h:form>
+
+        <h:link value="Back to Home" outcome="/CRUD_View/CRUD_Menu"/><br/><br/>
+        <h:link value="View Products in Database" outcome="/CRUD_View/Read/ViewDBTable"/><br/><br/>
+
+        <script>
+            function confirmSubmit() {
+                const productId = document.getElementById("product-id").value;
+                const name = document.getElementById("name").value;
+                const price = document.getElementById("price").value;
+                const stock = document.getElementById("stock").value;
+                const message =
+                        "Please confirm the product information:\n\n" +
+                        "Product ID: " + productId + "\n" +
+                        "Product Name: " + name + "\n" +
+                        "Price: " + price + "\n" +
+                        "Stock Quantity: " + stock + "\n\n" +
+                        "Do you want to submit this product?";
+                return confirm(message);
+            }
+        </script>
+    </h:body>
+</html>

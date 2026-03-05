@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+    <h:head>
+        <title>Product Database</title>
+    </h:head>
+    <h:body>
+        <h:link value="+ Add Product" outcome="/CRUD_View/Create/inputForm"/> <br/><br/>
+        <h:link value="Update Product" outcome="/CRUD_View/Update/showDBUpdateTable"/> <br/><br/>
+        <h:link value="- Remove Product" outcome="/CRUD_View/Delete/showDBDeleteTable"/><br/><br/>
+        
+        <h:form>
+            <h:dataTable value="#{productBean.list}" var="p" border="1">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                        #{p.id}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                        #{p.name}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Price</f:facet>
+                        #{p.price}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Qty on Hand</f:facet>
+                        #{p.quantityOnHand}
+                </h:column>
+            </h:dataTable>
+        </h:form>
+        
+        <h:link value="Back to Home" outcome="/CRUD_View/CRUD_Menu"/>
+    </h:body>
+</html>
