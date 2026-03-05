@@ -14,7 +14,9 @@ public class Product {
     private String name;
     private double price;
     private int quantityOnHand;
-
+    private byte[] image;
+    private int categoryId;
+    private String description;
     public Product() {
     }
 
@@ -57,4 +59,27 @@ public class Product {
         this.quantityOnHand = quantityOnHand;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
