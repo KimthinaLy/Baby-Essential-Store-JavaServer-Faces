@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author Admin
@@ -17,15 +19,41 @@ public class Product {
     private byte[] image;
     private int categoryId;
     private String description;
+    private String categoryName;
+    private List<String> occasions;
+
     public Product() {
     }
 
-    public Product(int id, String name, double price, int quantityOnHand) {
+    public Product(int id, String name, double price, int quantityOnHand, byte[] image, int categoryId, String description, String categoryName, List<String> occasions) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantityOnHand = quantityOnHand;
+        this.image = image;
+        this.categoryId = categoryId;
+        this.description = description;
+        this.categoryName = categoryName;
+        this.occasions = occasions;
     }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public List<String> getOccasions() {
+        return occasions;
+    }
+
+    public void setOccasions(List<String> occasions) {
+        this.occasions = occasions;
+    }
+
+
 
     public int getId() {
         return id;

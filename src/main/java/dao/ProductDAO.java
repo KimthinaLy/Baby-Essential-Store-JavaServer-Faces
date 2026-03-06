@@ -18,4 +18,6 @@ public interface ProductDAO {
     void updateProduct(Product p) throws Exception;
     Product getProductById(int id) throws Exception;
     List<Product> searchByName(String keyword) throws Exception;
+    List<Product> getProductsByCategory(int categoryId) throws Exception;
+    List<Product> getProductsByOccasion(int occasionId) throws Exception;
 }
