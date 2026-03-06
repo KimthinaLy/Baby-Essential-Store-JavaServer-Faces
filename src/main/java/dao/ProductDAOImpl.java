@@ -51,16 +51,15 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void insertProduct(Product p) throws Exception {
-        String sql = "INSERT INTO products(product_id,name,price,qty_on_hand,category_id, description, image ) VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO products(name,price,qty_on_hand,category_id, description, image ) VALUES(?,?,?,?,?,?)";
 
         try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, p.getId());
-            ps.setString(2, p.getName());
-            ps.setDouble(3, p.getPrice());
-            ps.setInt(4, p.getQuantityOnHand());
-            ps.setInt(5, p.getCategoryId());
-            ps.setString(6, p.getDescription());
-            ps.setBytes(7, p.getImage());
+            ps.setString(1, p.getName());
+            ps.setDouble(2, p.getPrice());
+            ps.setInt(3, p.getQuantityOnHand());
+            ps.setInt(4, p.getCategoryId());
+            ps.setString(5, p.getDescription());
+            ps.setBytes(6, p.getImage());
 
             ps.executeUpdate();
         }

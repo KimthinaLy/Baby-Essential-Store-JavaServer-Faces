@@ -4,10 +4,22 @@
  */
 package dao;
 
+import java.util.List;
+import model.Category;
+
 /**
  *
  * @author Admin
  */
-public class CategoryDAO {
-    
+public interface CategoryDAO {
+
+    List<Category> getAllCategories() throws Exception;
+
+    Category getCategoryById(int id) throws Exception;
+
+    void insertCategory(Category c) throws Exception;
+
+    void updateCategory(Category c) throws Exception;
+
+    void deleteCategory(int id) throws Exception;
 }

@@ -7,20 +7,20 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.Category;
+import model.Occasion;
 import util.DBUtil;
 
 /**
  *
  * @author Admin
  */
-public class CategoryDAOImpl implements CategoryDAO{
+public class OccasionDAOImpl implements OccasionDAO{
     @Override
-    public List<Category> getAllCategories() throws Exception {
+    public List<Occasion> getAllOccasions() throws Exception {
 
-        List<Category> list = new ArrayList<>();
+        List<Occasion> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM categories";
+        String sql = "SELECT * FROM occasions";
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -28,12 +28,12 @@ public class CategoryDAOImpl implements CategoryDAO{
 
             while(rs.next()){
 
-                Category c = new Category();
+                Occasion o = new Occasion();
 
-                c.setCategoryId(rs.getInt("category_id"));
-                c.setCategoryName(rs.getString("category_name"));
+                o.setOccasionId(rs.getInt("occasion_id"));
+                o.setOccasionName(rs.getString("occasion_name"));
 
-                list.add(c);
+                list.add(o);
             }
         }
 
@@ -41,9 +41,9 @@ public class CategoryDAOImpl implements CategoryDAO{
     }
 
     @Override
-    public Category getCategoryById(int id) throws Exception {
+    public Occasion getOccasionById(int id) throws Exception {
 
-        String sql = "SELECT * FROM categories WHERE category_id=?";
+        String sql = "SELECT * FROM occasions WHERE occasion_id=?";
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){
@@ -54,12 +54,12 @@ public class CategoryDAOImpl implements CategoryDAO{
 
             if(rs.next()){
 
-                Category c = new Category();
+                Occasion o = new Occasion();
 
-                c.setCategoryId(rs.getInt("category_id"));
-                c.setCategoryName(rs.getString("category_name"));
+                o.setOccasionId(rs.getInt("occasion_id"));
+                o.setOccasionName(rs.getString("occasion_name"));
 
-                return c;
+                return o;
             }
         }
 
@@ -67,38 +67,38 @@ public class CategoryDAOImpl implements CategoryDAO{
     }
 
     @Override
-    public void insertCategory(Category category) throws Exception {
+    public void insertOccasion(Occasion occasion) throws Exception {
 
-        String sql = "INSERT INTO categories(category_name) VALUES(?)";
+        String sql = "INSERT INTO occasions(occasion_name) VALUES(?)";
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){
 
-            ps.setString(1, category.getCategoryName());
+            ps.setString(1, occasion.getOccasionName());
 
             ps.executeUpdate();
         }
     }
 
     @Override
-    public void updateCategory(Category category) throws Exception {
+    public void updateOccasion(Occasion occasion) throws Exception {
 
-        String sql = "UPDATE categories SET category_name=? WHERE category_id=?";
+        String sql = "UPDATE occasions SET occasion_name=? WHERE occasion_id=?";
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){
 
-            ps.setString(1, category.getCategoryName());
-            ps.setInt(2, category.getCategoryId());
+            ps.setString(1, occasion.getOccasionName());
+            ps.setInt(2, occasion.getOccasionId());
 
             ps.executeUpdate();
         }
     }
 
     @Override
-    public void deleteCategory(int id) throws Exception {
+    public void deleteOccasion(int id) throws Exception {
 
-        String sql = "DELETE FROM categories WHERE category_id=?";
+        String sql = "DELETE FROM occasions WHERE occasion_id=?";
 
         try(Connection con = DBUtil.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){

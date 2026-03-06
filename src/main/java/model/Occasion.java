@@ -10,14 +10,14 @@ package model;
  */
 public class Occasion {
     private int occasionId;
-    private String name;
+    private String occasionName;
 
     public Occasion() {
     }
 
-    public Occasion(int occasionId, String name) {
+    public Occasion(int occasionId, String occasionName) {
         this.occasionId = occasionId;
-        this.name = name;
+        this.occasionName = occasionName;
     }
 
     public int getOccasionId() {
@@ -28,12 +28,12 @@ public class Occasion {
         this.occasionId = occasionId;
     }
 
-    public String getName() {
-        return name;
+    public String getOccasionName() {
+        return occasionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOccasionName(String occasionName) {
+        this.occasionName = occasionName;
     }
     
 }

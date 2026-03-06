@@ -8,6 +8,6 @@ package dao;
  *
  * @author Admin
  */
-public class CartItemDAOImpl {
+public class CartItemDAOImpl{
     
 }
