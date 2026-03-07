@@ -8,6 +8,6 @@ package Controller;
  *
  * @author Admin
  */
-public class LoginBean {
+public class DashboardBean {
     
 }
