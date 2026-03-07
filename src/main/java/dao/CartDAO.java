@@ -4,10 +4,17 @@
  */
 package dao;
 
+import model.Cart;
+
 /**
  *
  * @author Admin
  */
-public class CartDAO {
-    
+public interface CartDAO {
+
+    Cart getCartByUserId(int userId) throws Exception;
+
+    int createCart(int userId) throws Exception;
+
+    void deleteCart(int cartId) throws Exception;
 }

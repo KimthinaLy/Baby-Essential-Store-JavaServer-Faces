@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 /**
  *
@@ -14,7 +14,7 @@ public class Order {
     private int orderId;
     private int userId;
     private int addressId;
-    private LocalDateTime orderDate;
+    private Timestamp orderDate;
     private double totalAmount;
     private String orderStatus;
     private String paymentMethod;
@@ -23,7 +23,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderId, int userId, int addressId, LocalDateTime orderDate, double totalAmount, String orderStatus, String paymentMethod, String paymentStatus) {
+    public Order(int orderId, int userId, int addressId, Timestamp orderDate, double totalAmount, String orderStatus, String paymentMethod, String paymentStatus) {
         this.orderId = orderId;
         this.userId = userId;
         this.addressId = addressId;
@@ -58,11 +58,11 @@ public class Order {
         this.addressId = addressId;
     }
 
-    public LocalDateTime getOrderDate() {
+    public Timestamp getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
 

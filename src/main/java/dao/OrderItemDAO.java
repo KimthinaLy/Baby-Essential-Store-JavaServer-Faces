@@ -4,10 +4,15 @@
  */
 package dao;
 
+import java.util.List;
+import model.OrderItem;
+
 /**
  *
  * @author Admin
  */
-public class OrderItemDAO {
-    
+public interface OrderItemDAO {
+    void insertOrderItem(OrderItem item) throws Exception;
+
+    List<OrderItem> getItemsByOrderId(int orderId) throws Exception;
 }

@@ -17,11 +17,12 @@ public class Address {
     private String province;
     private String postalCode;
     private String receiverName;
+    private String phone;
 
     public Address() {
     }
 
-    public Address(int addressId, int userId, String street, String city, String province, String postalCode, String receiverName) {
+    public Address(int addressId, int userId, String street, String city, String province, String postalCode, String receiverName, String phone) {
         this.addressId = addressId;
         this.userId = userId;
         this.street = street;
@@ -29,6 +30,15 @@ public class Address {
         this.province = province;
         this.postalCode = postalCode;
         this.receiverName = receiverName;
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getReceiverName() {
@@ -38,7 +48,6 @@ public class Address {
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
     }
-
 
     public int getAddressId() {
         return addressId;
@@ -87,6 +96,5 @@ public class Address {
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
-    
-    
+
 }

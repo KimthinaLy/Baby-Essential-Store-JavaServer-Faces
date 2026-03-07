@@ -4,10 +4,23 @@
  */
 package dao;
 
+import java.util.List;
+import model.CartItem;
+
 /**
  *
  * @author Admin
  */
-public class CartItemDAO {
-    
+public interface CartItemDAO {
+
+    List<CartItem> getCartItems(int cartId) throws Exception;
+
+    void addItem(int cartId, int productId, int quantity) throws Exception;
+
+    void updateQuantity(int cartItemId, int quantity) throws Exception;
+
+    void removeItem(int cartItemId) throws Exception;
+
+    void clearCart(int cartId) throws Exception;
+
 }
