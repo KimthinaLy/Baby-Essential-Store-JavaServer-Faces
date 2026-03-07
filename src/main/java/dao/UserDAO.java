@@ -13,4 +13,5 @@ import model.User;
 public interface UserDAO {
     User login(String email, String password) throws Exception;
     boolean register(User user) throws Exception;
+    User findByEmail(String email) throws Exception;
 }

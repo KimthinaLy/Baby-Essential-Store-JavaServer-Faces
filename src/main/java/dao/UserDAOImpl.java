@@ -31,7 +31,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User login(String email, String password) throws Exception{
+    public User login(String email, String password) throws Exception {
         String sql = "SELECT * FROM user WHERE email=? AND password=?";
 
         try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -49,6 +49,29 @@ public class UserDAOImpl implements UserDAO {
                 user.setEmail(rs.getString("email"));
                 user.setRole(rs.getString("role"));
                 user.setPhone(rs.getString("phone"));
+
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public User findByEmail(String email) throws Exception {
+
+        String sql = "SELECT * FROM users WHERE email=?";
+
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
 
                 return user;
             }
