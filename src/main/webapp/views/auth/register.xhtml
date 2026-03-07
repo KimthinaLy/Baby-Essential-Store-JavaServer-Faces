@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+    <h:head>
+        <title>Register</title>
+        <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+    </h:head>
+    <h:body>
+        <div class="flex justify-content-center pt-5 pb-8" style="height:100vh">
+            <h:form>
+                <p:panel header="Register" style="width: 90vw; max-width:600px;">
+                    <p:messages/>
+
+                    <h4>User Info</h4>
+                    <div class="p-fluid flex flex-column row-gap-4">
+
+                        <span class="ui-float-label">
+                            <p:inputText id="fullName" value="#{authBean.user.fullName}" required="true"
+                                         requiredMessage="Name is required" styleClass="w-full"/>
+                            <p:outputLabel for="@previous" value="Full Name"/>
+                        </span>
+
+                        <span class="ui-float-label">
+                            <p:inputText id="email" value="#{authBean.user.email}" required="true"
+                                         requiredMessage="Email is required" styleClass="w-full"/>
+                            <p:outputLabel for="@previous" value="Email"/>
+                        </span>
+
+
+
+                        <span class="ui-float-label">
+                            <p:password id="pwd1" value="#{authBean.user.password}" required="true"
+                                        requiredMessage="Password number is required" styleClass="w-full"/>
+                            <p:outputLabel for="@previous" value="Password"/>
+                        </span>
+
+                        <span class="ui-float-label">
+                            <p:password id="pwd2" value="#{authBean.user.password}" required="true"
+                                        requiredMessage="Password number is required" styleClass="w-full"/>
+                            <p:outputLabel for="@previous" value="Confirm Password"/>
+                        </span>
+
+                        <span class="ui-float-label">
+                            <p:inputMask id="phone" value="#{authBean.user.phone}" required="true"
+                                         requiredMessage="Phone number is required" mask="(999) 999-9999" validateMask="true" styleClass="w-full"/>
+                            <p:outputLabel for="@previous" value="Phone Number"/>
+                        </span>
+
+                        <p:separator style="width:100%;" />
+                        
+                        <h4>Address</h4>
+
+                        <p:outputLabel for="@next" value="Receiver Name" />
+                        <p:inputText placeholder="Receiver Name"
+                                     value="#{authBean.address.receiverName}" required="true"/>
+
+                        <p:outputLabel for="@next" value="Receiver Phone" />
+                        <p:inputMask id="receiverPhone" value="#{authBean.address.phone}" mask="(999) 999-9999" validateMask="true" required="true"/>
+                        
+                        <p:outputLabel for="@next" value="Street" />
+                        <p:inputText placeholder="Street"
+                                     value="#{authBean.address.street}" required="true"/>
+
+                        <p:outputLabel for="@next" value="City" />
+                        <p:inputText placeholder="City"
+                                     value="#{authBean.address.city}" required="true"/>
+
+                        <p:outputLabel for="@next" value="Province" />
+                        <p:inputText placeholder="Province"
+                                     value="#{authBean.address.province}" required="true"/>
+
+                        <p:outputLabel for="@next" value="Postal Code" />
+                        <p:inputText placeholder="Postal Code"
+                                     value="#{authBean.address.postalCode}" required="true"/>
+
+
+                        <p:commandButton
+                            value="Register"
+                            action="#{authBean.register}" />
+                        
+                        
+                      <p:separator style="width:100%; " />
+                        
+                        <p:link value="Back"
+                                outcome="/views/auth/login"/>
+                    </div>
+                </p:panel>
+
+            </h:form>
+        </div>
+    </h:body>
+</html>

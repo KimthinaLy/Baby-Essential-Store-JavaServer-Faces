@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+    <h:head>
+        <title>Login</title>
+        <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+    </h:head>
+    <h:body>
+        <div class="flex justify-content-center align-items-center" style="height:100vh">
+            
+            <h:form>
+                <p:panel header="Login" style="width: 100vw; max-width:500px;">
+                    <p:messages/>
+
+                    <div class="p-fluid">
+                        <h5><p:outputLabel for="@next" value="Enter Email"/></h5>
+                            <p:inputText id="email" value="#{authBean.user.email}" required="true"
+                                         requiredMessage="Email is required" styleClass="w-full"/>
+
+                        <h5><p:outputLabel for="@next" value="Enter Password"/></h5>
+                        <p:password id="password" value="#{authBean.user.password}"  redisplay="true" placeholder="Password"
+                                    required="true" requiredMessage="Password is required" styleClass="w-full" />
+                        <br/><br/>
+
+                        <p:commandButton
+                            value="Login"
+                            icon="pi pi-sign-in"
+                            action="#{authBean.login}" />
+                        
+                        <p:separator/>
+
+                        <p:link value="Register"
+                                outcome="/views/auth/register"/>
+                        
+                    </div>
+                </p:panel>
+            </h:form>
+        </div>
+    </h:body>
+</html>

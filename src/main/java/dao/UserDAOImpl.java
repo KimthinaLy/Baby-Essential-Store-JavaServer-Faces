@@ -13,21 +13,29 @@ import util.DBUtil;
  * @author Admin
  */
 public class UserDAOImpl implements UserDAO {
-
     @Override
-    public boolean register(User user) throws Exception {
+    public int register(User user) throws Exception {
+
         String sql = "INSERT INTO user(full_name,email,password,phone,role) VALUES(?,?,?,?,?)";
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
-            ps.setString(5, user.getRole());
+            ps.setString(5, "CUSTOMER");
 
-            return ps.executeUpdate() > 0;
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         }
+
+        return 0;
     }
 
     @Override
