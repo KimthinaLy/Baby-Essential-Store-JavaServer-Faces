@@ -4,14 +4,22 @@
  */
 package Controller;
 
+import dao.CategoryDAO;
+import dao.CategoryDAOImpl;
+import dao.OccasionDAO;
+import dao.OccasionDAOImpl;
 import dao.ProductDAO;
 import dao.ProductDAOImpl;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.List;
+import model.Category;
+import model.Occasion;
 import model.Product;
 
 /**
@@ -22,12 +30,39 @@ import model.Product;
 @ViewScoped
 public class ProductBean implements Serializable {
 
-    private ProductDAO productDAO = new ProductDAOImpl();
-    private Product product = new Product();
+    final private ProductDAO productDAO = new ProductDAOImpl();
+    final private CategoryDAO categoryDAO = new CategoryDAOImpl();
+    final private OccasionDAO occasionDAO = new OccasionDAOImpl();
 
+    private Product product = new Product();
+    private List<Product> products;
+    private List<Category> categories;
+    private List<Occasion> occasions;
+
+    @PostConstruct
+    public void init() {
+        try {
+            products = productDAO.getAllProducts();
+            categories = categoryDAO.getAllCategories();
+            occasions = occasionDAO.getAllOccasions();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public List<Occasion> getOccasions() {
+        return occasions;
+    }
+
+    //delete later
     public List<Product> getList() {
         try {
-            return productDAO.getAllProducts();
+            products = productDAO.getAllProducts();
+            return products;
         } catch (Exception e) {
             return null;
         }
@@ -64,14 +99,14 @@ public class ProductBean implements Serializable {
         } catch (Exception e) {
         }
     }
-    
-    public String update(){
-        try{
-        productDAO.updateProduct(product);
-        FacesContext.getCurrentInstance()
-                .addMessage(null,new FacesMessage("Updated successfully"));
-        return "/CRUD_View/Update/showDBUpdateTable";
-        }catch (Exception e){
+
+    public String update() {
+        try {
+            productDAO.updateProduct(product);
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, new FacesMessage("Updated successfully"));
+            return "/CRUD_View/Update/showDBUpdateTable";
+        } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Save failed", null));
             return null;
@@ -81,5 +116,24 @@ public class ProductBean implements Serializable {
     public Product getProduct() {
         return product;
     }
-    
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void filterByCategory(int categoryId) {
+        try {
+            products = productDAO.getProductsByCategory(categoryId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void filterByOccasion(int occasionId) {
+        try {
+            products = productDAO.getProductsByOccasion(occasionId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

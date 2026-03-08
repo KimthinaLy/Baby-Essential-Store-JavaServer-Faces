@@ -3,13 +3,13 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <div class="flex align-items-center justify-content-between px-5 py-1 shadow-2 bg-white">
+    <div class="flex align-items-center justify-content-between px-5 py-1 shadow-2 bg-white z-5 fixed right-0 left-0 top-0">
         <!-- LEFT SIDE -->
         <div class="flex align-items-center gap-4">
 
             <p:link outcome="/index" styleClass="flex align-items-center">
                 <p:graphicImage name="logo2.png" height="60" library="images"/>
-                <span class="text-primary text-xl font-bold">Baby Essential</span>
+                <span class="text-primary text-xl font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis">Baby Essential</span>
             </p:link>
             <p:link outcome="/index" styleClass="flex align-items-center gap-2 no-underline text-color">
                 <i class="pi pi-home text-primary"></i>
@@ -25,13 +25,12 @@
 
         <!-- CENTER SEARCH BAR -->
         <div class="flex align-items-center w-4">
-            
-            <div class="ui-inputgroup w-full">
+            <h:form class="flex align-items-center w-full">
+                <div class="ui-inputgroup w-full">
                     <div class="ui-inputgroup-addon flex align-items-center justify-content-center bg-white"><i class="pi pi-search text-primary"></i></div>
                     <p:inputText placeholder="Search product by name..." styleClass="w-full"/>
                 </div>
-            
-            
+            </h:form>
         </div>
 
         <!-- RIGHT SIDE -->
@@ -46,46 +45,34 @@
 
 
             <!-- IF USER LOGGED IN -->
-            <h:panelGroup rendered="#{not empty loginBean.user}">
-                <p:link outcome="/views/profile/profile">
-                    <p:button value="Profile" icon="pi pi-user"/>
-                </p:link>
+            <h:form styleClass="flex align-items-center gap-4">
+                <h:panelGroup rendered="#{not empty loginBean.user}">
+                    <p:link outcome="/views/profile/profile">
+                        <p:button value="Profile" icon="pi pi-user"/>
+                    </p:link>
 
-                <p:commandButton value="Logout"
-                                 action="#{loginBean.logout}"
-                                 icon="pi pi-sign-out"
-                                 styleClass="p-button-text"/>
+                    <p:commandButton value="Logout"
+                                     action="#{loginBean.logout}"
+                                     icon="pi pi-sign-out"
+                                     styleClass="p-button-text"/>
 
-            </h:panelGroup>
+                </h:panelGroup>
 
 
-            <!-- IF USER NOT LOGGED IN -->
-            <h:panelGroup rendered="#{empty loginBean.user}">
+                <!-- IF USER NOT LOGGED IN -->
+                <h:panelGroup rendered="#{empty loginBean.user}">
 
-                <p:link outcome="/views/auth/login">
-                    <p:button value="Register" icon="pi pi-user-plus"/>
-                </p:link>
+                    <p:link outcome="/views/auth/login">
+                        <p:button value="Register" icon="pi pi-user-plus"/>
+                    </p:link>
 
-                <p:commandButton value="Login"
-                                 action="#{loginBean.login}"
-                                 icon="pi pi-sign-in"
-                                 styleClass="p-button-text"/>
+                    <p:commandButton value="Login"
+                                     action="#{loginBean.login}"
+                                     icon="pi pi-sign-in"
+                                     styleClass="p-button-text"/>
 
-            </h:panelGroup>
-
+                </h:panelGroup>
+            </h:form>
         </div>
     </div>
-
-    <!-- comment 
-    <div class="surface-section px-4 py-5 md:px-6 lg:px-8 border-bottom-1 surface-border">
-        <div class="flex flex-column md:flex-row md:align-items-center md:justify-content-between">
-            <div class="font-bold text-3xl text-900">Baby Essential Store</div>
-            <div class="mt-3 md:mt-0">
-                <p:button value="Home" icon="pi pi-home" styleClass="ui-button-flat mr-2" />
-                <p:button value="Products" icon="pi pi-shopping-bag" styleClass="ui-button-flat mr-2" />
-                <p:button value="Cart" icon="pi pi-shopping-cart" styleClass="ui-button-flat" />
-            </div>
-        </div>
-    </div>
-    -->
 </ui:composition>

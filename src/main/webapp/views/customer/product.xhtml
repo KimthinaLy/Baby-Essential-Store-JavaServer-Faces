@@ -4,12 +4,123 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:define name="content">
+    <ui:define name="content">
+        <div style="min-height: 100vh">
+        <div class=" overflow-y-auto fixed" style="height: 100vh; width: clamp(220px, 25vw, 320px); padding-top: 10vh; padding-bottom: 5vh">
+            <h:form>
+                <p:panelMenu>
 
-<h2>Products</h2>
+                    <!-- CATEGORY -->
+                    <p:submenu label="Categories" expanded="true">
 
-</ui:define>
+                        <p:menuitem value="Clothing"
+                                    action="#{productBean.filterByCategory(1)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Diapers &amp; Care"
+                                    action="#{productBean.filterByCategory(2)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Bath Essentials"
+                                    action="#{productBean.filterByCategory(3)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Toys"
+                                    action="#{productBean.filterByCategory(4)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Activity &amp; Entertainment"
+                                    action="#{productBean.filterByCategory(5)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Car Seats &amp; Accessories"
+                                    action="#{productBean.filterByCategory(6)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Apparel &amp; Accessories"
+                                    action="#{productBean.filterByCategory(7)}"
+                                    update=":productGrid"/>
+                        <p:menuitem value="Gifts"
+                                    action="#{productBean.filterByCategory(8)}"
+                                    update=":productGrid"/>
+                    </p:submenu>
+
+                    <!-- OCCASIONS -->
+                    <p:submenu label="Occasions" expanded="true">
+
+                        <p:menuitem value="Newborn"
+                                    action="#{productBean.filterByOccasion(1)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Baby Shower"
+                                    action="#{productBean.filterByOccasion(2)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Birthday"
+                                    action="#{productBean.filterByOccasion(3)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Christmas"
+                                    action="#{productBean.filterByOccasion(4)}"
+                                    update=":productGrid"/>
+
+                        <p:menuitem value="Halloween"
+                                    action="#{productBean.filterByOccasion(5)}"
+                                    update=":productGrid"/>
+
+                    </p:submenu>
+                </p:panelMenu>
+            </h:form>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div style="padding-left: clamp(220px, 25vw, 320px); padding-top: 10vh">
+            <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);">
+
+                <div class="grid gap-6 justify-content-center">
+                    <ui:repeat value="#{productBean.products}" var="p">
+                        <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 
+
+                            <!-- CLICKABLE PRODUCT IMAGE -->
+                            <h:link outcome="/views/customer/product-detail">
+                                <f:param name="id" value="#{p.id}" />
+                                <h:graphicImage value="#{p.getProductImage()}" 
+                                                style="max-width: 100%;
+                                                aspect-ratio: 1 / 1;
+                                                height: auto;
+                                                object-fit: cover;"
+                                                styleClass="border-round-md"/>
+                            </h:link>
+
+                            <!-- ADD TO CART -->
+                            <p:commandButton value="Add To Cart"
+                                             icon="pi pi-shopping-cart"
+                                             action="#{cartBean.addToCart(p)}"
+                                             process="@this"
+                                             update=":globalForm:messages"
+                                             styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>
+                            <!-- PRODUCT NAME -->
+                            <h:link outcome="/views/customer/product-detail" styleClass="no-underline text-lg text-color font-bold">
+                                <f:param name="id" value="#{p.id}" />
+                                <div class="my-2 white-space-nowrap overflow-hidden text-overflow-ellipsis">#{p.name}</div>
+
+                            </h:link>
+                            <!-- PRODUCT PRICE -->
+
+                            <h:outputText value="$#{p.price}"  styleClass="my-2 text-color-secondary font-bold"/>
+
+                            <br/><br/>
+
+                        </div>
+
+                    </ui:repeat>
+                </div>
+            </h:form>
+        </div>
+    </div>
+    </ui:define>
 
 </ui:composition>

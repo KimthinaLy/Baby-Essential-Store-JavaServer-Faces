@@ -1,0 +1,105 @@
+       <!-- LEFT SIDEBAR -->
+            <div class="col-12 md:col-3">
+
+                <h:form>
+
+                    <p:panelMenu>
+
+                        <!-- CATEGORY -->
+                        <p:submenu label="Categories" expanded="true">
+
+                            <p:menuitem value="Clothing"
+                                        action="#{productBean.filterByCategory(1)}"
+                                        update="productGrid"/>
+
+                            <p:menuitem value="Diapers & Care"
+                                        action="#{productBean.filterByCategory(2)}"
+                                        update="productGrid"/>
+
+                            <p:menuitem value="Bath Essentials"
+                                        action="#{productBean.filterByCategory(3)}"
+                                        update="productGrid"/>
+                            
+                           <p:menuitem value="Toys"
+                                        action="#{productBean.filterByCategory(4)}"
+                                        update="productGrid"/>
+                           
+                           <p:menuitem value="Activity & Entertainment"
+                                        action="#{productBean.filterByCategory(5)}"
+                                        update="productGrid"/>
+                           
+                           <p:menuitem value="Car Seats & Accessories"
+                                        action="#{productBean.filterByCategory(6)}"
+                                        update="productGrid"/>
+                           
+                           <p:menuitem value="Apparel & Accessories"
+                                        action="#{productBean.filterByCategory(7)}"
+                                        update="productGrid"/>
+                        </p:submenu>
+
+                        <!-- OCCASIONS -->
+                        <p:submenu label="Occasions" expanded="true">
+
+                            <p:menuitem value="Newborn"
+                                        action="#{productBean.filterByOccasion(1)}"
+                                        update="productGrid"/>
+
+                            <p:menuitem value="Baby Shower"
+                                        action="#{productBean.filterByOccasion(2)}"
+                                        update="productGrid"/>
+
+                            <p:menuitem value="Birthday"
+                                        action="#{productBean.filterByOccasion(3)}"
+                                        update="productGrid"/>
+                            
+                            <p:menuitem value="Christmas"
+                                        action="#{productBean.filterByOccasion(4)}"
+                                        update="productGrid"/>
+                            
+                            <p:menuitem value="'Halloween'"
+                                        action="#{productBean.filterByOccasion(5)}"
+                                        update="productGrid"/>
+
+                        </p:submenu>
+
+                    </p:panelMenu>
+
+                </h:form>
+
+            </div>
+
+
+            <!-- PRODUCT GRID -->
+            <div class="col-12 md:col-9">
+
+                <h:form id="productGrid">
+
+                    <!-- NO PRODUCT MESSAGE -->
+                    <h:panelGroup rendered="#{empty productBean.products}">
+                        <h3>No Product Found</h3>
+                    </h:panelGroup>
+
+                    <!-- PRODUCT GRID -->
+                    <p:dataGrid value="#{productBean.products}"
+                                var="p"
+                                columns="3"
+                                rendered="#{not empty productBean.products}">
+
+                        <p:panel header="#{p.name}">
+
+                            <h:outputText value="#{p.description}" />
+                            <br/>
+
+                            <h:outputText value="Price: $#{p.price}" />
+                            <br/><br/>
+
+                            <p:commandButton value="Add To Cart"
+                                             icon="pi pi-shopping-cart"/>
+
+                        </p:panel>
+
+                    </p:dataGrid>
+
+                </h:form>
+
+            </div>

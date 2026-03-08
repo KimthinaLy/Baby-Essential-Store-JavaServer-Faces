@@ -10,9 +10,9 @@
 
         <h:outputStylesheet library="webjars"
                             name="primeflex/3.3.1/primeflex.min.css" />
-         <link rel="icon"
-          type="image/x-icon"
-          href="#{resource['images:logo2.png']}" />
+        <link rel="icon"
+              type="image/x-icon"
+              href="#{resource['images:logo2.png']}" />
     </h:head>
 
     <h:body class="flex flex-column min-h-screen surface-ground m-0">
@@ -20,8 +20,11 @@
         <!-- HEADER -->
         <ui:include src="/components/header.xhtml"/>
 
+        <h:form id="globalForm">
+            <p:growl id="messages" showDetail="true" life="3000"/>
+        </h:form>
         <!-- PAGE CONTENT -->
-        <div class="flex-grow-1 p-4">
+        <div class="flex-grow-1 p-2">
 
             <ui:insert name="content"/>
 

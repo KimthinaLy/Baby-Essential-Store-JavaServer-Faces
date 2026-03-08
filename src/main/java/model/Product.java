@@ -4,6 +4,8 @@
  */
 package model;
 
+import org.apache.tika.Tika;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -52,8 +54,6 @@ public class Product {
     public void setOccasions(List<String> occasions) {
         this.occasions = occasions;
     }
-
-
 
     public int getId() {
         return id;
@@ -110,4 +110,23 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getProductImage() {
+    if (image == null) {
+        return "/resources/images/logo2.png"; // fallback
+    }
+
+    Tika tika = new Tika();
+    String mimeType;
+    try {
+        mimeType = tika.detect(image);
+    } catch (Exception e) {
+        mimeType = "image/jpeg"; // fallback
+    }
+
+    String base64 = Base64.getEncoder().encodeToString(image);
+    return "data:" + mimeType + ";base64," + base64;
+}
+
+
 }
