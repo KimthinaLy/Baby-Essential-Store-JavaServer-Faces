@@ -54,7 +54,7 @@ public class AuthBean implements Serializable {
                     return "/views/employee/product-list?faces-redirect=true";
                 }
 
-                return "/views/customer/product-list?faces-redirect=true";
+                return "/views/customer/product?faces-redirect=true";
             }
 
         } catch (Exception e) {

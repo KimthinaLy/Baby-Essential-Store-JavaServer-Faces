@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="primefaces">
+    
+    <div class="bg-primary text-white p-5">
+        <div class="flex justify-content-center flex-wrap column-gap-5">
+            <div class="">
+                <div class="text-lg font-bold mb-3">Let Us Help You</div>
+                <ul class="list-none p-0">
+                    <li class="mb-2"><p:link value="Products" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"><p:link value="Your Orders" outcome="/views/customer/order-history"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"> <p:link value="Customer Support" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"><p:link value="Contact Us" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"><p:link value="Help Center" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                </ul>
+            </div>
+            <div class="">
+                <div class="text-lg font-bold mb-3">Policies</div>
+                <ul class="list-none p-0">
+                    <li class="mb-2"><p:link value="Shipping Information" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"><p:link value="Return &amp; Refund Policy" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                    <li class="mb-2"><p:link value="Order Tracking" outcome="/views/customer/product"
+                                              styleClass="text-white no-underline text-s"/></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 border-top-1 border-600 border-white" />
+        <div class="text-center text-sm text-500 text-white">
+            © 2026 Baby Essential Store — All Rights Reserved.
+        </div>
+    </div>
+</ui:composition>

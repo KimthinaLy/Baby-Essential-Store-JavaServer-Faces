@@ -1,14 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         Hello from Facelets
-        <h:link value="CRUD Menu" outcome="CRUD_View/CRUD_Menu"/>
-
-        <h:link value="Test PrimeFace" outcome="views/auth/login"/>
+         <p:link value="Register"
+                                outcome="/views/auth/login"/>
+           <p:link value="Product"
+                                outcome="/views/customer/product"/>
     </h:body>
 </html>
