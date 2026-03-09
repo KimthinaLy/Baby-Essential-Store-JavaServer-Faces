@@ -79,7 +79,7 @@
         <!-- PRODUCT GRID -->
         <div style="padding-left: clamp(220px, 25vw, 320px); padding-top: 10vh">
             <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);">
-
+                
                 <div class="grid gap-6 justify-content-center">
                     <ui:repeat value="#{productBean.products}" var="p">
                         <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 
@@ -98,7 +98,7 @@
                             <!-- ADD TO CART -->
                             <p:commandButton value="Add To Cart"
                                              icon="pi pi-shopping-cart"
-                                             action="#{cartBean.addToCart(p)}"
+                                             action="#{cartBean.addToCart(p.id)}"
                                              process="@this"
                                              update=":globalForm:messages"
                                              styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>

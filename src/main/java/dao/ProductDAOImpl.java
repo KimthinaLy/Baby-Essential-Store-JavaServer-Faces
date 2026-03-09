@@ -124,10 +124,10 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public List<Product> searchByName(String keyword) throws Exception {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE name LIKE ?";
+        String sql = "SELECT * FROM products WHERE LOWER(name) LIKE ?";
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, "%" + keyword + "%");
+            ps.setString(1, "%" + keyword.toLowerCase() + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -136,12 +136,10 @@ public class ProductDAOImpl implements ProductDAO {
                 p.setName(rs.getString("name"));
                 p.setPrice(rs.getDouble("price"));
                 p.setQuantityOnHand(rs.getInt("qty_on_hand"));
-                p.setQuantityOnHand(rs.getInt("qty_on_hand"));
                 p.setCategoryId(rs.getInt("category_id"));
-                p.setCategoryName(rs.getString("category_name"));
-                p.setDescription(rs.getString("desctption"));
-                p.setImage(rs.getBytes("image"));
-                p.setOccasions(getOccasionsByProductId(p.getId()));
+                p.setDescription(rs.getString("description"));
+                p.setImage(rs.getBytes("image"));       
+                
                 productList.add(p);
             }
         }

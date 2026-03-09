@@ -17,7 +17,7 @@ public class CartDAOImpl implements CartDAO {
     @Override
     public Cart getCartByUserId(int userId) throws Exception {
 
-        String sql = "SELECT * FROM cart WHERE user_id=?";
+        String sql = "SELECT * FROM carts WHERE user_id=?";
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -38,7 +38,7 @@ public class CartDAOImpl implements CartDAO {
     @Override
     public int createCart(int userId) throws Exception {
 
-        String sql = "INSERT INTO cart(user_id) VALUES(?)";
+        String sql = "INSERT INTO carts(user_id) VALUES(?)";
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -57,7 +57,7 @@ public class CartDAOImpl implements CartDAO {
     @Override
     public void deleteCart(int cartId) throws Exception {
 
-        String sql = "DELETE FROM cart WHERE cart_id=?";
+        String sql = "DELETE FROM carts WHERE cart_id=?";
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 

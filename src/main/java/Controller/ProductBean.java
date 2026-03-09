@@ -16,11 +16,13 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import model.Category;
 import model.Occasion;
 import model.Product;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -38,6 +40,10 @@ public class ProductBean implements Serializable {
     private List<Product> products;
     private List<Category> categories;
     private List<Occasion> occasions;
+
+    private String searchKeyword;
+    private Integer selectedProductId;
+    private Product selectedProduct;
 
     @PostConstruct
     public void init() {
@@ -132,6 +138,82 @@ public class ProductBean implements Serializable {
     public void filterByOccasion(int occasionId) {
         try {
             products = productDAO.getProductsByOccasion(occasionId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //=================== Search ======================
+    public Product getSelectedProduct() {
+        return selectedProduct;
+    }
+
+    public void setSelectedProduct(Product selectedProduct) {
+        this.selectedProduct = selectedProduct;
+    }
+
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
+
+    public Integer getSelectedProductId() {
+        return selectedProductId;
+    }
+
+    public void setSelectedProductId(Integer selectedProductId) {
+        this.selectedProductId = selectedProductId;
+    }
+
+    public List<Product> completeProduct(String query) {
+
+        try {
+            return productDAO.searchByName(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public void selectProduct(SelectEvent<Product> event) {
+        Product p = event.getObject();
+        try {
+            FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .redirect("product-detail.xhtml?id=" + p.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchProducts() {
+
+        try {
+            FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .redirect("products.xhtml?keyword=" + searchKeyword);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadSearchProducts() {
+
+        try {
+
+            if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+
+                products = productDAO.searchByName(searchKeyword);
+
+            } else {
+
+                products = productDAO.getAllProducts();
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

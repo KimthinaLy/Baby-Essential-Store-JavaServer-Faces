@@ -112,21 +112,33 @@ public class Product {
     }
 
     public String getProductImage() {
-    if (image == null) {
-        return "/resources/images/logo2.png"; // fallback
+        if (image == null) {
+            return "/resources/images/logo2.png"; // fallback
+        }
+
+        Tika tika = new Tika();
+        String mimeType;
+        try {
+            mimeType = tika.detect(image);
+        } catch (Exception e) {
+            mimeType = "image/jpeg"; // fallback
+        }
+
+        String base64 = Base64.getEncoder().encodeToString(image);
+        return "data:" + mimeType + ";base64," + base64;
     }
 
-    Tika tika = new Tika();
-    String mimeType;
-    try {
-        mimeType = tika.detect(image);
-    } catch (Exception e) {
-        mimeType = "image/jpeg"; // fallback
-    }
-
-    String base64 = Base64.getEncoder().encodeToString(image);
-    return "data:" + mimeType + ";base64," + base64;
+    @Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Product)) return false;
+    Product other = (Product) o;
+    return this.id == other.id; // compare primitive ints directly
 }
 
+@Override
+public int hashCode() {
+    return Integer.hashCode(id);
+}
 
 }

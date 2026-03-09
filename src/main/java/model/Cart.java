@@ -13,17 +13,12 @@ import java.time.LocalDateTime;
 public class Cart {
     private int cartId;
     private int userId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
     public Cart() {
     }
 
-    public Cart(int cartId, int userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Cart(int cartId, int userId) {
         this.cartId = cartId;
         this.userId = userId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public int getCartId() {
@@ -41,22 +36,5 @@ public class Cart {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
     
 }

@@ -22,5 +22,6 @@ public interface CartItemDAO {
     void removeItem(int cartItemId) throws Exception;
 
     void clearCart(int cartId) throws Exception;
+    CartItem getItem(int cartId, int productId) throws Exception;
 
 }
