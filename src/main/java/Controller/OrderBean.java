@@ -37,6 +37,7 @@ public class OrderBean implements Serializable {
     ProductDAO productDAO = new ProductDAOImpl();
     private List<Order> orders = new ArrayList<>();
     private List<OrderItem> orderItems;
+    private List<Order> allOrders = new ArrayList<>();
 
     @Inject
     private CartBean cartBean;
@@ -169,4 +170,35 @@ public class OrderBean implements Serializable {
         }
         return "Error Image=================";
     }
+    
+     public List<Order> getAllOrders() {
+        try {
+            allOrders = orderDAO.getAllOrders();
+            return allOrders;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+     
+     
+     public void updatePaymentStatus(Order order){
+    try{
+        orderDAO.updatePaymentStatus(order.getOrderId(), order.getPaymentStatus());
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage("Payment status updated"));
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
+
+public void updateOrderStatus(Order order){
+    try{
+        orderDAO.updateOrderStatus(order.getOrderId(), order.getOrderStatus());
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage("Order status updated"));
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
 }

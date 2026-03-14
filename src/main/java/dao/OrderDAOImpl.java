@@ -157,4 +157,31 @@ public class OrderDAOImpl implements OrderDAO {
             }
         }
     }
+    
+  public  List<Order> getAllOrders() throws Exception{
+  List<Order> orders = new ArrayList<>();
+
+        String sql = "SELECT * FROM orders ORDER BY order_date DESC";
+
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+
+                order.setOrderId(rs.getInt("order_id"));
+                order.setUserId(rs.getInt("user_id"));
+                order.setAddressId(rs.getInt("address_id"));
+                order.setOrderDate(rs.getTimestamp("order_date"));
+                order.setTotalAmount(rs.getDouble("total_amount"));
+                order.setOrderStatus(rs.getString("order_status"));
+                order.setPaymentMethod(rs.getString("payment_method"));
+                order.setPaymentStatus(rs.getString("payment_status"));
+
+                orders.add(order);
+            }
+        }
+
+        return orders;
+  }
 }

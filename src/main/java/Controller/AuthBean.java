@@ -34,6 +34,7 @@ public class AuthBean implements Serializable {
         try {
 
             User loggedUser = userDAO.login(user.getEmail(), user.getPassword());
+            user = loggedUser;
 
             if (loggedUser != null) {
                 FacesContext.getCurrentInstance()
@@ -50,7 +51,7 @@ public class AuthBean implements Serializable {
                 }
 
                 if (loggedUser.getRole().equals("EMPLOYEE")) {
-                    return "/views/employee/product-list?faces-redirect=true";
+                    return "/views/employee/view-orders?faces-redirect=true";
                 }
 
                 return "/views/customer/product?faces-redirect=true";

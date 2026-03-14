@@ -1,0 +1,139 @@
+<ui:composition
+    template="/templates/staff-layout.xhtml"
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- HEADER -->
+    <ui:define name="header">
+        <div class="flex align-items-center justify-content-between w-full px-3">
+
+            <h3 class="m-0">
+                Welcome, #{authBean.user.fullName} 👋
+            </h3>
+
+        </div>
+    </ui:define>
+
+
+    <!-- SIDEBAR MENU -->
+    <ui:define name="menu">
+        <h:form>
+            <p:menu styleClass="w-full border-none">
+                <p:menuitem value="View Product"
+                            icon="pi pi-box"
+                            outcome="/views/employee/product-list"/>
+
+                <p:menuitem value="Manage Orders"
+                            icon="pi pi-shopping-cart"
+                            outcome="/views/employee/manage-orders"/>
+                <p:separator/>
+            </p:menu>
+            
+            <p:commandButton value="Logout"
+                                     action="#{authBean.logout}"
+                                     icon="pi pi-sign-out"
+                                     styleClass="ui-button-danger"/>
+        </h:form>
+    </ui:define>
+
+
+    <!-- CONTENT -->
+    <ui:define name="content">
+
+        <div class="px-3 min-h-screen">
+
+            <h2 class="text-primary text-center mb-4">Manage Orders</h2>
+
+            <h:form id="orderForm">
+
+                <p:dataTable value="#{orderBean.allOrders}" var="o"
+                             rowIndexVar="i"
+                             styleClass="p-datatable-striped">
+
+                    <!-- Number -->
+                    <p:column headerText="No." style="width:60px">
+                        #{i + 1}
+                    </p:column>
+
+                    <!-- Order ID -->
+                    <p:column headerText="Order ID">
+                        #{o.orderId}
+                    </p:column>
+
+                    <!-- Total -->
+                    <p:column headerText="Total Price">
+                        $#{o.totalAmount}
+                    </p:column>
+
+                    <!-- Date -->
+                    <p:column headerText="Order Date">
+                        <h:outputText value="#{o.orderDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+
+
+                    <!-- PAYMENT STATUS (Editable) -->
+                    <p:column headerText="Payment Status">
+
+                        <p:tag value="#{o.paymentStatus}"
+                               severity="#{o.paymentStatus eq 'PAID' ? 'success' : 'danger'}"/>
+
+                    </p:column>
+
+
+                    <!-- ORDER STATUS (Editable) -->
+                    <p:column headerText="Order Status">
+
+                        <p:tag value="#{o.orderStatus}"
+                               severity="#{
+                               o.orderStatus eq 'PENDING' ? 'warning' :
+                                   o.orderStatus eq 'PAID' ? 'info' :
+                                   o.orderStatus eq 'SHIPPED' ? 'secondary' :
+                                   o.orderStatus eq 'COMPLETED' ? 'success' :
+                                   o.orderStatus eq 'CANCELLED' ? 'danger' :
+                                   'info'
+           }"/>
+
+                    </p:column>
+
+
+                    <!-- ACTION -->
+                    <p:column headerText="Action" style="width:180px">
+
+                        <!-- View -->
+                        <p:commandButton icon="pi pi-eye"
+                                         value="View"
+                                         styleClass="p-button-info p-button-sm mr-2 mb-1"
+                                         action="#{orderBean.viewOrderItems(o.orderId)}"/>
+
+                        <!-- Delete -->
+                        <p:commandButton icon="pi pi-trash"
+                                         value="Delete"
+                                         styleClass="p-button-danger p-button-sm"
+                                         action="#{orderBean.deleteOrder(o.orderId)}">
+
+                            <p:confirm header="Confirm Delete"
+                                       message="Are you sure you want to delete this order?"
+                                       icon="pi pi-exclamation-triangle"/>
+
+                        </p:commandButton>
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+        </div>
+
+        <form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"/>
+        </form>
+    </ui:define>
+
+</ui:composition>

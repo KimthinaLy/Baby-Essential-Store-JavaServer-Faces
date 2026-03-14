@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Baby Essential Store</title>
+        <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+        <link rel="icon" type="image/x-icon" href="#{resource['images:logo2.png']}" />
+    </h:head>
+    <h:body class="m-0">
+        <!-- FULL PAGE -->
+        <div class="flex flex-column h-screen m-0">
+
+            <!-- HEADER -->
+            <div class="bg-primary text-white flex align-items-center p-0"
+                 style="height:60px; flex-shrink:0;">
+                <ui:insert name="header"/>
+            </div>
+            <h:form>
+                <p:growl id="messages" showDetail="true" life="3000"/>
+            </h:form>
+            <!-- BODY AREA -->
+            <div class="flex flex-1 overflow-hidden">
+
+                <!-- SIDEBAR -->
+                <div class="surface-100 border-right-1 border-300 
+                     flex flex-column overflow-auto"
+                     style="width:260px;">
+                    <ui:insert name="menu"/>
+                </div>
+
+                <!-- PAGE CONTENT -->
+                <div class="flex-1 overflow-auto p-4">
+                    <ui:insert name="content"/>
+                </div>
+
+            </div>
+        </div>
+    </h:body>
+</html>
