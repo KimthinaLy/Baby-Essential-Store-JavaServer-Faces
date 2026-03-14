@@ -17,11 +17,10 @@ import util.DBUtil;
 public class AddressDAOImpl implements AddressDAO {
 
     @Override
-    public List<Address> getAddressesByUser(int userId) throws Exception {
-
-        List<Address> list = new ArrayList<>();
+    public Address getAddressByUser(int userId) throws Exception {
 
         String sql = "SELECT * FROM address WHERE user_id=?";
+        Address a = new Address();
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -29,10 +28,7 @@ public class AddressDAOImpl implements AddressDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-
-                Address a = new Address();
-
+            if (rs.next()) {
                 a.setAddressId(rs.getInt("address_id"));
                 a.setUserId(rs.getInt("user_id"));
                 a.setReceiverName(rs.getString("receiver_name"));
@@ -41,12 +37,10 @@ public class AddressDAOImpl implements AddressDAO {
                 a.setCity(rs.getString("city"));
                 a.setProvince(rs.getString("province"));
                 a.setPostalCode(rs.getString("postal_code"));
-
-                list.add(a);
             }
         }
 
-        return list;
+        return a;
     }
 
     @Override

@@ -136,4 +136,25 @@ public class OrderDAOImpl implements OrderDAO {
             ps.executeUpdate();
         }
     }
+
+    @Override
+    public void deleteOrder(int orderId) throws Exception {
+
+        String sql = """
+        DELETE FROM orders
+        WHERE order_id = ?
+        AND order_status = 'Completed'
+    """;
+
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) {
+                throw new Exception("Order cannot be deleted unless it is completed.");
+            }
+        }
+    }
 }

@@ -31,7 +31,7 @@ public class ProductDAOImpl implements ProductDAO {
 
                 Product p = new Product();
 
-                p.setId(rs.getInt("product_id"));
+                p.setProductId(rs.getInt("product_id"));
                 p.setName(rs.getString("name"));
                 p.setDescription(rs.getString("description"));
                 p.setPrice(rs.getDouble("price"));
@@ -41,7 +41,7 @@ public class ProductDAOImpl implements ProductDAO {
                 p.setImage(rs.getBytes("image"));
 
                 // fetch occasions for this product
-                p.setOccasions(getOccasionsByProductId(p.getId()));
+                p.setOccasions(getOccasionsByProductId(p.getProductId()));
 
                 productList.add(p);
             }
@@ -86,7 +86,7 @@ public class ProductDAOImpl implements ProductDAO {
             ps.setInt(4, p.getCategoryId());
             ps.setString(5, p.getDescription());
             ps.setBytes(6, p.getImage());
-            ps.setInt(7, p.getId());
+            ps.setInt(7, p.getProductId());
 
             ps.executeUpdate();
         }
@@ -108,12 +108,12 @@ public class ProductDAOImpl implements ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                p.setId(rs.getInt("product_id"));
+                p.setProductId(rs.getInt("product_id"));
                 p.setName(rs.getString("name"));
                 p.setPrice(rs.getDouble("price"));
                 p.setQuantityOnHand(rs.getInt("qty_on_hand"));
                 p.setCategoryId(rs.getInt("category_id"));
-                p.setDescription(rs.getString("desctption"));
+                p.setDescription(rs.getString("description"));
                 p.setImage(rs.getBytes("image"));
                 return p;
             }
@@ -132,14 +132,14 @@ public class ProductDAOImpl implements ProductDAO {
 
             while (rs.next()) {
                 Product p = new Product();
-                p.setId(rs.getInt("product_id"));
+                p.setProductId(rs.getInt("product_id"));
                 p.setName(rs.getString("name"));
                 p.setPrice(rs.getDouble("price"));
                 p.setQuantityOnHand(rs.getInt("qty_on_hand"));
                 p.setCategoryId(rs.getInt("category_id"));
                 p.setDescription(rs.getString("description"));
-                p.setImage(rs.getBytes("image"));       
-                
+                p.setImage(rs.getBytes("image"));
+
                 productList.add(p);
             }
         }
@@ -168,7 +168,7 @@ public class ProductDAOImpl implements ProductDAO {
 
                 Product p = new Product();
 
-                p.setId(rs.getInt("product_id"));
+                p.setProductId(rs.getInt("product_id"));
                 p.setName(rs.getString("name"));
                 p.setDescription(rs.getString("description"));
                 p.setPrice(rs.getDouble("price"));
@@ -177,7 +177,7 @@ public class ProductDAOImpl implements ProductDAO {
                 p.setCategoryName(rs.getString("category_name"));
                 p.setImage(rs.getBytes("image"));
 
-                p.setOccasions(getOccasionsByProductId(p.getId()));
+                p.setOccasions(getOccasionsByProductId(p.getProductId()));
 
                 productList.add(p);
             }
@@ -210,8 +210,7 @@ public class ProductDAOImpl implements ProductDAO {
             while (rs.next()) {
 
                 Product p = new Product();
-
-                p.setId(rs.getInt("product_id"));
+                p.setProductId(rs.getInt("product_id"));
                 p.setName(rs.getString("name"));
                 p.setDescription(rs.getString("description"));
                 p.setPrice(rs.getDouble("price"));
@@ -221,7 +220,7 @@ public class ProductDAOImpl implements ProductDAO {
                 p.setImage(rs.getBytes("image"));
 
                 // load occasions list
-                p.setOccasions(getOccasionsByProductId(p.getId()));
+                p.setOccasions(getOccasionsByProductId(p.getProductId()));
 
                 productList.add(p);
             }

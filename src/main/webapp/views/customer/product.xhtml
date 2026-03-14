@@ -86,7 +86,7 @@
 
                             <!-- CLICKABLE PRODUCT IMAGE -->
                             <h:link outcome="/views/customer/product-detail">
-                                <f:param name="id" value="#{p.id}" />
+                                <f:param name="id" value="#{p.productId}" />
                                 <h:graphicImage value="#{p.getProductImage()}" 
                                                 style="max-width: 100%;
                                                 aspect-ratio: 1 / 1;
@@ -98,13 +98,13 @@
                             <!-- ADD TO CART -->
                             <p:commandButton value="Add To Cart"
                                              icon="pi pi-shopping-cart"
-                                             action="#{cartBean.addToCart(p.id)}"
+                                             action="#{cartBean.addToCart(p.productId)}"
                                              process="@this"
                                              update=":globalForm:messages"
                                              styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>
                             <!-- PRODUCT NAME -->
                             <h:link outcome="/views/customer/product-detail" styleClass="no-underline text-lg text-color font-bold">
-                                <f:param name="id" value="#{p.id}" />
+                                <f:param name="id" value="#{p.productId}" />
                                 <div class="my-2 white-space-nowrap overflow-hidden text-overflow-ellipsis">#{p.name}</div>
 
                             </h:link>

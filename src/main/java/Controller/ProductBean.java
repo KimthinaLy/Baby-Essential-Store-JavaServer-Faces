@@ -183,7 +183,7 @@ public class ProductBean implements Serializable {
         try {
             FacesContext.getCurrentInstance()
                     .getExternalContext()
-                    .redirect("product-detail.xhtml?id=" + p.getId());
+                    .redirect("product-detail.xhtml?id=" + p.getProductId());
         } catch (Exception e) {
             e.printStackTrace();
         }

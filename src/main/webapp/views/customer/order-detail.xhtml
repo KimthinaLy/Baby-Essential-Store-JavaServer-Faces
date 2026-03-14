@@ -1,0 +1,74 @@
+<ui:composition
+    template="/templates/layout.xhtml"
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div class="grid justify-content-center min-h-screen" style="padding-top: 10vh">
+            <div class="col-12 lg:col-10 p-0">
+
+                <h2 class="mb-4 text-primary">Items in this Order</h2>
+
+                <h:form id="orderItemsForm">
+
+                    <p:dataTable value="#{orderBean.orderItems}"
+                                 var="item"
+                                 rowIndexVar="index"
+                                 styleClass="w-full m-0">
+
+                        <!-- ORDER ITEM NUMBER -->
+                        <p:column headerText="#" style="width:80px">
+                            #{index + 1}
+                        </p:column>
+
+                        <!-- PRODUCT IMAGE -->
+                        <p:column headerText="Product Image" style="width:120px">
+                            <h:graphicImage value="#{orderBean.getOrderItemImage(item.productId)}"
+                                            style="width:80px;height:80px"/>
+                        </p:column>
+
+                        <!-- PRODUCT NAME -->
+                        <p:column headerText="Product Name"
+                                  styleClass="white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                            #{item.productName}
+                        </p:column>
+
+                        <!-- PRICE -->
+                        <p:column headerText="Price">
+                            $ 
+                            <h:outputText value="#{item.price}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <!-- QUANTITY -->
+                        <p:column headerText="Quantity">
+                            #{item.quantity}
+                        </p:column>
+
+                        <!-- SUBTOTAL -->
+                        <p:column headerText="Subtotal">
+                            $ 
+                            <h:outputText value="#{item.price * item.quantity}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <!-- BACK BUTTON -->
+                    <div class="flex justify-content-start mt-4">
+                        <p:button value="Back to Orders"
+                                  icon="pi pi-arrow-left"
+                                  outcome="/views/customer/order-history"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

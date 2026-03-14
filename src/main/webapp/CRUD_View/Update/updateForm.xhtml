@@ -12,14 +12,14 @@
     </h:head>
     <h:body>
         <h:panelGroup rendered="#{not empty productBean.product}">
-            <h:form onsubmit="return confirmUpdate(#{productBean.product.id})">            
+            <h:form onsubmit="return confirmUpdate(#{productBean.product.productId})">            
                 <fieldset>
                     <legend>Product Information</legend>
 
 
                     <h:outputLabel for="product_id" value="Product"/>
-                    <h:outputText value="#{productBean.product.id}" />
-                    <h:inputHidden id="product_id" value="#{productBean.product.id}"/>
+                    <h:outputText value="#{productBean.pproductIdduct.id}" />
+                    <h:inputHidden id="product_id" value="#{producproductIdean.product.id}"/>
                     <br/><br/>
 
                     <h:outputLabel for="name" value="Product Name"/>

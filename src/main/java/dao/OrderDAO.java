@@ -22,4 +22,5 @@ public interface OrderDAO {
     void updateOrderStatus(int orderId, String status) throws Exception;
 
     void updatePaymentStatus(int orderId, String paymentStatus) throws Exception;
+     void deleteOrder(int orderId) throws Exception;
 }

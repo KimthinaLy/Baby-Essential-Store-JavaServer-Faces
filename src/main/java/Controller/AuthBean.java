@@ -36,7 +36,6 @@ public class AuthBean implements Serializable {
             User loggedUser = userDAO.login(user.getEmail(), user.getPassword());
 
             if (loggedUser != null) {
-
                 FacesContext.getCurrentInstance()
                         .getExternalContext()
                         .getSessionMap()
@@ -82,6 +81,7 @@ public class AuthBean implements Serializable {
 
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        user = null;
 
         return "/views/customer/product?faces-redirect=true";
     }

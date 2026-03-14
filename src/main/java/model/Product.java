@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Product {
 
-    private int id;
+    private int productId;
     private String name;
     private double price;
     private int quantityOnHand;
@@ -28,7 +28,7 @@ public class Product {
     }
 
     public Product(int id, String name, double price, int quantityOnHand, byte[] image, int categoryId, String description, String categoryName, List<String> occasions) {
-        this.id = id;
+        this.productId = id;
         this.name = name;
         this.price = price;
         this.quantityOnHand = quantityOnHand;
@@ -55,12 +55,12 @@ public class Product {
         this.occasions = occasions;
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -133,12 +133,12 @@ public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Product)) return false;
     Product other = (Product) o;
-    return this.id == other.id; // compare primitive ints directly
+    return this.productId == other.productId; // compare primitive ints directly
 }
 
 @Override
 public int hashCode() {
-    return Integer.hashCode(id);
+    return Integer.hashCode(productId);
 }
 
 }

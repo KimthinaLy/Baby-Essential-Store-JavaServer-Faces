@@ -13,7 +13,7 @@ import model.Address;
  */
 public interface AddressDAO {
     
-     List<Address> getAddressesByUser(int userId) throws Exception;
+     Address getAddressByUser(int userId) throws Exception;
      
      Address getAddressById(int addressId) throws Exception;
 

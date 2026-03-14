@@ -67,6 +67,10 @@
                 <span class="text-primary">Cart</span>
             </p:link>
 
+            <p:link outcome="/views/customer/order-history">
+                <p:button value="Your Orders" icon="pi pi-shopping-bag"/>
+            </p:link>
+
 
             <!-- IF USER LOGGED IN -->
             <h:form styleClass="flex align-items-center gap-4">
@@ -86,14 +90,15 @@
                 <!-- IF USER NOT LOGGED IN -->
                 <h:panelGroup rendered="#{empty sessionScope.user}">
 
-                    <p:link outcome="/views/auth/login">
+                    <p:link outcome="/views/auth/register">
                         <p:button value="Register" icon="pi pi-user-plus"/>
                     </p:link>
 
-                    <p:commandButton value="Login"
-                                     action="#{authBean.login}"
-                                     icon="pi pi-sign-in"
-                                     styleClass="p-button-text"/>
+                    <p:link outcome="/views/auth/login">
+                        <p:button value="Login" icon="pi pi-sign-in"/>
+                    </p:link>
+
+
 
                 </h:panelGroup>
             </h:form>

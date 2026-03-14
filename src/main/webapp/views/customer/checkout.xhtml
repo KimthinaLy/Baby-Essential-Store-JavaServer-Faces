@@ -1,11 +1,103 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition
+    template="/templates/layout.xhtml"
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div style="padding-top: 10vh; padding-bottom: 10vh" class="px-3 min-h-screen">
+            <!-- DELIVERY ADDRESS -->
+            <div class="mb-4 p-3 border-round surface-100">
+
+                <h3 class="text-primary">Delivery Address</h3>
+
+                <h:panelGroup rendered="#{not empty addressBean.address}">
+                    <p>
+                        <b>Name:</b> #{addressBean.address.receiverName}
+                    </p>
+
+                    <p>
+                        <b>Phone:</b> #{addressBean.address.phone}
+                    </p>
+
+                    <p>
+                        <b>Address:</b>
+                        #{addressBean.address.street},
+                        #{addressBean.address.city},
+                        #{addressBean.address.province},
+                        #{addressBean.address.postalCode}
+                    </p>
+                </h:panelGroup>
+
+            </div>
+            <h2 class="mb-4 text-primary text-center">Order Summary</h2>
+            <h:form>
+                <p:dataTable value="#{cartBean.selectedItems}" var="item">
+
+                    <p:column headerText="Product Image" style="width:120px">
+                        <h:graphicImage value="#{item.product.getProductImage()}"
+                                        style="width:80px;height:80px"/>
+                    </p:column>
+                    <p:column headerText="Product" styleClass="white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                        #{item.product.name}
+                    </p:column>
+
+                    <p:column headerText="Quantity">
+                        x #{item.quantity}
+                    </p:column>
+
+                    <p:column headerText="Price per Unit">
+                        $#{item.product.price}
+                    </p:column>
+                    <p:column headerText="Total Price">
+                        $#{item.product.price * item.quantity}
+                    </p:column>
+                </p:dataTable>
+
+                <!-- TOTAL PRICE -->
+                <div class="flex justify-content-end mt-3 text-lg font-bold">
+                    Total: $
+                    <h:outputText value="#{cartBean.selectedTotal}" styleClass="text-lg font-bold">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </div>
+
+                <div class="flex justify-content-center flex-wrap surface-100">
+
+                    <div style="width:200px;">
+
+                        <h2 class="text-primary text-center mb-3">Payment Method</h2>
+
+                        <p:selectOneRadio layout="pageDirection">
+                            <f:selectItem itemLabel="Cash On Delivery" itemValue="COD"/>
+                            <f:selectItem itemLabel="QR Payment" itemValue="QR"/>
+                            <f:selectItem itemLabel="Credit Card" itemValue="CARD"/>
+                        </p:selectOneRadio>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTONS BELOW TABLE -->
+                <div class="flex justify-content-between mt-4">
+
+                    <p:link outcome="/views/customer/cart" styleClass="text-white">
+                        <p:button value="Back" icon="pi pi-shopping-cart" />
+                    </p:link>
+
+                    <p:commandButton 
+                        value="Place Order"
+                        icon="pi pi-check"
+                        action="#{orderBean.placeOrder}"
+                        styleClass="p-button-success">
+
+                    </p:commandButton>
+                </div>
+
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

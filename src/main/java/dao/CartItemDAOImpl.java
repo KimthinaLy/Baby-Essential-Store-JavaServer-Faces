@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.CartItem;
 import java.sql.*;
+import model.Product;
 import util.DBUtil;
 
 /**
@@ -21,7 +22,19 @@ public class CartItemDAOImpl implements CartItemDAO {
 
         List<CartItem> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM cart_items WHERE cart_id=?";
+        String sql = """
+        SELECT 
+            ci.cart_item_id,
+            ci.cart_id,
+            ci.product_id,
+            ci.quantity,
+            p.name,
+            p.price,
+            p.image
+        FROM cart_items ci
+        JOIN products p ON ci.product_id = p.product_id
+        WHERE ci.cart_id = ?
+    """;
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -36,6 +49,14 @@ public class CartItemDAOImpl implements CartItemDAO {
                 item.setCartId(rs.getInt("cart_id"));
                 item.setProductId(rs.getInt("product_id"));
                 item.setQuantity(rs.getInt("quantity"));
+
+                Product p = new Product();
+                p.setProductId(rs.getInt("product_id"));
+                p.setName(rs.getString("name"));
+                p.setPrice(rs.getDouble("price"));
+                p.setImage(rs.getBytes("image"));
+
+                item.setProduct(p);
 
                 list.add(item);
             }

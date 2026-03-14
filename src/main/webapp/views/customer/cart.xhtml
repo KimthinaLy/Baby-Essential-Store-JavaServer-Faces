@@ -8,9 +8,104 @@
     xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <div class="h-screen">
-        <div class="text-primary w-screen text-xl text-center p-2 font-bold" style="width: 5rem; margin-top: 10vh;">Shopping Cart</div>
-        
+        <div class="grid justify-content-center min-h-screen" style="padding-top: 10vh">
+            <div class="col-12 lg:col-10 p-0">
+
+                <h2 class="mb-4 text-primary">Shopping Cart</h2>
+                <h:form id="cartForm">
+
+                    <p:dataTable id="cartItemsTable"
+                                 value="#{cartBean.cartItems}"
+                                 var="item"
+                                 selection="#{cartBean.selectedItems}"
+                                 rowKey="#{item.cartItemId}"
+                                 styleClass="w-full m-0"
+                                 selectionMode="multiple">
+
+                        <!-- SELECT -->
+                        <p:column selectionBox="true" exportable="false"></p:column>
+
+                        <!-- PRODUCT IMAGE -->
+                        <p:column headerText="Product Image" style="width:120px">
+                            <h:graphicImage value="#{item.product.getProductImage()}"
+                                            style="width:80px;height:80px"/>
+                        </p:column>
+
+                        <!-- PRODUCT NAME -->
+                        <p:column headerText="Product Name" styleClass="white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                            #{item.product.name}
+                        </p:column>
+
+                        <!-- QUANTITY -->
+                        <p:column headerText="Quantity" style="width:140px">
+                            <p:spinner id="qty" value="#{item.quantity}" min="1" max="99">
+                            </p:spinner>
+                        </p:column>
+
+                        <!-- PRICE -->
+                        <p:column headerText="Price">
+                            $#{item.product.price}
+                        </p:column>
+
+                        <!-- SUBTOTAL -->
+                        <p:column headerText="Subtotal">
+                            <span>$</span>
+                            <h:outputText value="#{item.product.price * item.quantity}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <!-- ACTION -->
+                        <p:column headerText="Action" style="width:200px">
+
+                            <div class="flex gap-2">
+
+                                <p:commandButton value="Update"
+                                                 icon="pi pi-refresh"
+                                                 action="#{cartBean.updateItem(item)}"
+                                                 update="cartForm"
+                                                 styleClass="p-button-sm"/> 
+
+                                <p:commandButton value="Delete"
+                                                 icon="pi pi-trash"
+                                                 action="#{cartBean.removeItem(item.cartItemId)}"
+                                                 update="cartForm"
+                                                 styleClass="p-button-danger p-button-sm"/>
+
+                            </div>
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <!-- TOTAL PRICE -->
+                    <div class="flex justify-content-end mt-3 text-lg font-bold">
+                        Total: $
+                        <h:outputText value="#{cartBean.selectedTotal}" styleClass="text-lg font-bold">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
+                    </div>
+
+                    <!-- BUTTONS BELOW TABLE -->
+                    <div class="flex justify-content-between mt-4">
+
+                        <p:commandButton value="Delete Selected"
+                                         icon="pi pi-trash"
+                                         action="#{cartBean.deleteSelected}"
+                                         update="cartForm"
+                                         styleClass="p-button-danger"/>
+
+                        <p:commandButton value="Checkout Selected"
+                                         icon="pi pi-shopping-cart"
+                                         action="#{cartBean.checkoutSelected}"
+                                         styleClass="p-button-success"/>
+
+                    </div>
+
+                </h:form>
+
+            </div>
         </div>
+
     </ui:define>
 </ui:composition>
