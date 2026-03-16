@@ -17,7 +17,6 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import model.Category;
 import model.Occasion;
@@ -40,6 +39,7 @@ public class ProductBean implements Serializable {
     private List<Product> products;
     private List<Category> categories;
     private List<Occasion> occasions;
+    private List<Product> selectedProducts;
 
     private String searchKeyword;
     private Integer selectedProductId;
@@ -77,19 +77,23 @@ public class ProductBean implements Serializable {
     public void delete(int id) {
         try {
             productDAO.deleteProduct(id);
+            products = productDAO.getAllProducts();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Deleted"));
         } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Delete Failed", null));
         }
     }
 
-    public String insert() {
+    public void insert() {
         try {
             productDAO.insertProduct(product);
-            return "/CRUD_View/Read/ViewDBTable?faces-redirect=true";
+            products = productDAO.getAllProducts();
+            product = new Product(); 
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Save failed", null));
-            return null; //stay on the same page and rerender the current view
         }
     }
 
@@ -106,16 +110,16 @@ public class ProductBean implements Serializable {
         }
     }
 
-    public String update() {
+    public void update() {
         try {
             productDAO.updateProduct(product);
+            products = productDAO.getAllProducts();
+            product = new Product(); 
             FacesContext.getCurrentInstance()
                     .addMessage(null, new FacesMessage("Updated successfully"));
-            return "/CRUD_View/Update/showDBUpdateTable";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Save failed", null));
-            return null;
         }
     }
 
@@ -123,6 +127,11 @@ public class ProductBean implements Serializable {
         return product;
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    
     public List<Product> getProducts() {
         return products;
     }
@@ -140,6 +149,55 @@ public class ProductBean implements Serializable {
             products = productDAO.getProductsByOccasion(occasionId);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public List<Product> getSelectedProducts() {
+        return selectedProducts;
+    }
+
+    public void setSelectedProducts(List<Product> selectedProducts) {
+        this.selectedProducts = selectedProducts;
+    }
+
+    public void deleteSelectedProducts() {
+
+        if (selectedProducts == null || selectedProducts.isEmpty()) {
+            return;
+        }
+
+        for (Product p : selectedProducts) {
+            delete(p.getProductId());
+        }
+
+        selectedProducts = null;
+    }
+
+    public void openNew() {
+        product = new Product();
+    }
+
+    public void save() {
+
+        try {
+
+            if (product.getProductId() == 0) {
+                productDAO.insertProduct(product);
+            } else {
+                productDAO.updateProduct(product);
+            }
+
+            products = productDAO.getAllProducts();
+            product = new Product(); 
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Product saved"));
+
+        } catch (Exception e) {
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Save failed", null));
+
         }
     }
 

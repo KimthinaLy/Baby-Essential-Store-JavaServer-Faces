@@ -51,6 +51,22 @@ public class Product {
         return occasions;
     }
 
+    public String getOccasionNames() {
+
+        String occ = "";
+
+        for (String o : occasions) {
+            if (!occ.isEmpty()) {
+                occ += ", ";
+            }
+            occ += o;
+        }
+        if("".equals(occ))
+            return "---";
+        else
+            return occ;
+    }
+
     public void setOccasions(List<String> occasions) {
         this.occasions = occasions;
     }
@@ -129,16 +145,20 @@ public class Product {
     }
 
     @Override
-public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Product)) return false;
-    Product other = (Product) o;
-    return this.productId == other.productId; // compare primitive ints directly
-}
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        Product other = (Product) o;
+        return this.productId == other.productId; // compare primitive ints directly
+    }
 
-@Override
-public int hashCode() {
-    return Integer.hashCode(productId);
-}
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(productId);
+    }
 
 }
