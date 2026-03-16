@@ -67,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
 
     public User findByEmail(String email) throws Exception {
 
-        String sql = "SELECT * FROM users WHERE email=?";
+        String sql = "SELECT * FROM user WHERE email=?";
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -80,6 +80,33 @@ public class UserDAOImpl implements UserDAO {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setEmail(rs.getString("email"));
+                user.setFullName(rs.getString("full_name"));
+                user.setPhone(rs.getString("phone"));
+
+                return user;
+            }
+        }
+
+        return null;
+    }
+    
+    @Override
+    public User findById(int id) throws Exception{
+        String sql = "SELECT * FROM user WHERE user_id=?";
+
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setFullName(rs.getString("full_name"));
+                user.setPhone(rs.getString("phone"));
 
                 return user;
             }

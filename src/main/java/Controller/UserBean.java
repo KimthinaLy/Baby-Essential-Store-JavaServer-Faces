@@ -4,10 +4,19 @@
  */
 package Controller;
 
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
 /**
  *
  * @author Admin
  */
-public class UserBean {
+
+@Named
+@SessionScoped
+public class UserBean implements Serializable{
+    
+    
     
 }

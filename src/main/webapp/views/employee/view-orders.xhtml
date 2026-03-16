@@ -29,7 +29,7 @@
 
                 <p:menuitem value="Manage Orders"
                             icon="pi pi-shopping-cart"
-                            outcome="/views/employee/manage-orders"/>
+                            outcome="/views/employee/view-orders"/>
                 <p:separator/>
             </p:menu>
             
@@ -107,14 +107,15 @@
 
                         <!-- View -->
                         <p:commandButton icon="pi pi-eye"
-                                         value="View"
+                                         value="Detail"
                                          styleClass="p-button-info p-button-sm mr-2 mb-1"
-                                         action="#{orderBean.viewOrderItems(o.orderId)}"/>
+                                         action="#{orderBean.manageOrder(o.orderId)}"/>
 
                         <!-- Delete -->
                         <p:commandButton icon="pi pi-trash"
                                          value="Delete"
                                          styleClass="p-button-danger p-button-sm"
+                                         update="orderForm :messages"
                                          action="#{orderBean.deleteOrder(o.orderId)}">
 
                             <p:confirm header="Confirm Delete"
@@ -131,9 +132,20 @@
 
         </div>
 
-        <form>
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"/>
-        </form>
+        <h:form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes"
+                         type="button"
+                         styleClass="ui-confirmdialog-yes p-button-danger"
+                         icon="pi pi-check"/>
+
+        <p:commandButton value="No"
+                         type="button"
+                         styleClass="ui-confirmdialog-no p-button-secondary"
+                         icon="pi pi-times"/>
+        </p:confirmDialog>
+
+        </h:form>
     </ui:define>
 
 </ui:composition>

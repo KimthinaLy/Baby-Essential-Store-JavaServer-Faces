@@ -4,12 +4,16 @@
  */
 package Controller;
 
+import dao.AddressDAO;
+import dao.AddressDAOImpl;
 import dao.OrderDAO;
 import dao.OrderDAOImpl;
 import dao.OrderItemDAO;
 import dao.OrderItemDAOImpl;
 import dao.ProductDAO;
 import dao.ProductDAOImpl;
+import dao.UserDAO;
+import dao.UserDAOImpl;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -18,6 +22,7 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import model.Address;
 import model.CartItem;
 import model.Order;
 import model.OrderItem;
@@ -35,9 +40,13 @@ public class OrderBean implements Serializable {
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderItemDAO orderItemDAO = new OrderItemDAOImpl();
     ProductDAO productDAO = new ProductDAOImpl();
-    private List<Order> orders = new ArrayList<>();
+    UserDAO userDAO = new UserDAOImpl();
+    AddressDAO addressDAO = new AddressDAOImpl();
+    
+    private List<Order> orders = new ArrayList<>(); //by user id
     private List<OrderItem> orderItems;
-    private List<Order> allOrders = new ArrayList<>();
+    private List<Order> allOrders = new ArrayList<>(); //all orders from all user
+    private Order selectedOrder = new Order(); //one specific order get by OrderId
 
     @Inject
     private CartBean cartBean;
@@ -143,7 +152,8 @@ public class OrderBean implements Serializable {
         try {
 
             orderDAO.deleteOrder(orderId);
-
+            
+            allOrders = orderDAO.getAllOrders();
             orders.removeIf(o -> o.getOrderId() == orderId);
 
             FacesContext.getCurrentInstance().addMessage(null,
@@ -160,7 +170,6 @@ public class OrderBean implements Serializable {
     public String getOrderItemImage(int pid) {
 
         try {
-            System.out.println("======Id=====" + pid + "==================");
             Product p = productDAO.getProductById(pid);
 
             System.out.println(p.getProductImage());
@@ -168,10 +177,10 @@ public class OrderBean implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "Error Image=================";
+        return null;
     }
-    
-     public List<Order> getAllOrders() {
+
+    public List<Order> getAllOrders() {
         try {
             allOrders = orderDAO.getAllOrders();
             return allOrders;
@@ -180,25 +189,70 @@ public class OrderBean implements Serializable {
             return null;
         }
     }
-     
-     
-     public void updatePaymentStatus(Order order){
-    try{
-        orderDAO.updatePaymentStatus(order.getOrderId(), order.getPaymentStatus());
-        FacesContext.getCurrentInstance().addMessage(null,
-            new FacesMessage("Payment status updated"));
-    }catch(Exception e){
-        e.printStackTrace();
-    }
-}
 
-public void updateOrderStatus(Order order){
-    try{
-        orderDAO.updateOrderStatus(order.getOrderId(), order.getOrderStatus());
-        FacesContext.getCurrentInstance().addMessage(null,
-            new FacesMessage("Order status updated"));
-    }catch(Exception e){
-        e.printStackTrace();
+    public void updatePaymentStatus() {
+        try {
+            orderDAO.updatePaymentStatus(selectedOrder.getOrderId(), selectedOrder.getPaymentStatus());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Payment status updated"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
+
+    public void updateOrderStatus() {
+        try {
+            orderDAO.updateOrderStatus(selectedOrder.getOrderId(), selectedOrder.getOrderStatus());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Order status updated"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String manageOrder(int orderId) {
+        try {
+            orderItems = orderItemDAO.getItemsByOrderId(orderId);
+            selectedOrder = getSelectedOrderById(orderId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "/views/employee/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;
+    }
+
+    public Order getSelectedOrderById(int orderId) {
+        try {
+            selectedOrder = orderDAO.getOrderById(orderId);
+            orderItems = orderItemDAO.getItemsByOrderId(orderId);
+            return selectedOrder;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Order getSelectedOrder() {
+        return selectedOrder;
+    }
+
+    public User getOrderCustomer(){
+        
+        try {
+            return userDAO.findById(selectedOrder.getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public String getCustomerAddress(){
+        try {
+            Address address = addressDAO.getAddressById(selectedOrder.getAddressId());
+            String adr = address.getStreet() + ", " + address.getCity() + ", " + address.getProvince() + ", " + address.getPostalCode() + ".";
+            return adr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

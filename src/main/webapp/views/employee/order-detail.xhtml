@@ -1,11 +1,260 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition
+    template="/templates/staff-layout.xhtml"
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- HEADER -->
+    <ui:define name="header">
+        <div class="flex align-items-center justify-content-between w-full px-3">
+
+            <h3 class="m-0">
+                Welcome, #{authBean.user.fullName} 👋
+            </h3>
+
+        </div>
+    </ui:define>
+
+
+    <!-- SIDEBAR MENU -->
+    <ui:define name="menu">
+        <h:form>
+            <p:menu styleClass="w-full border-none">
+                <p:menuitem value="View Product"
+                            icon="pi pi-box"
+                            outcome="/views/employee/product-list"/>
+
+                <p:menuitem value="Manage Orders"
+                            icon="pi pi-shopping-cart"
+                            outcome="/views/employee/view-orders"/>
+                <p:separator/>
+            </p:menu>
+
+            <p:commandButton value="Logout"
+                             action="#{authBean.logout}"
+                             icon="pi pi-sign-out"
+                             styleClass="ui-button-danger"/>
+        </h:form>
+    </ui:define>
+
+
+    <!-- CONTENT -->
+    <ui:define name="content">
+        <div class="grid">
+            <div class="col-9">
+                <!-- ORDER INFORMATION -->
+                <h2 class="text-primary"><i class="pi pi-file text-lg"></i> Order Detail</h2>
+                <p:card id="orderInfo" title="Order Information" styleClass="mb-4">
+                    <div class="grid">
+
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Order ID
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-hashtag mr-1"></i> #{orderBean.selectedOrder.orderId}
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Order Date
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-calendar mr-1"></i>
+                                <h:outputText value="#{orderBean.selectedOrder.orderDate}">
+                                    <f:convertDateTime pattern="dd MMM yyyy"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Total Price
+                            </div>
+                            <div class="text-xl font-semibold text-green-600">
+                                <i class="pi pi-wallet mr-1"></i><span>$</span>
+                                <h:outputText value="#{orderBean.selectedOrder.totalAmount}">
+                                    <f:convertNumber minFractionDigits="2"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                <i class="pi pi-credit-card mr-1"></i> Payment Status
+                            </div>
+
+                            <p:tag value="#{orderBean.selectedOrder.paymentStatus}"
+                                   severity="#{orderBean.selectedOrder.paymentStatus eq 'Paid' ? 'success' : 'warning'}"/>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                <i class="pi pi-truck mr-1"></i> Order Status
+                            </div>
+                            <p:tag value="#{orderBean.selectedOrder.orderStatus}"
+                                   severity="#{
+                                   orderBean.selectedOrder.orderStatus eq 'PENDING' ? 'warning' :
+                                       orderBean.selectedOrder.orderStatus eq 'PAID' ? 'info' :
+                                       orderBean.selectedOrder.orderStatus eq 'SHIPPED' ? 'secondary' :
+                                       orderBean.selectedOrder.orderStatus eq 'COMPLETED' ? 'success' :
+                                       orderBean.selectedOrder.orderStatus eq 'CANCELLED' ? 'danger' :
+                                       'info'
+           }"/>
+                        </div>
+                    </div>
+                </p:card>
+
+                <p:card title="Customer Information" styleClass="mb-4">
+
+                    <div class="grid">
+
+                        <!-- Customer Name -->
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Name
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-user mr-1"></i> #{orderBean.getOrderCustomer().fullName}
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Email
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-envelope mr-1"></i> #{orderBean.getOrderCustomer().email}
+                            </div>
+                        </div>
+
+                        <!-- Mobile -->
+                        <div class="col-6">
+                            <div class="text-600 text-sm mb-1">
+                                Mobile
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-phone mr-1"></i> #{orderBean.getOrderCustomer().phone}
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-12">
+                            <div class="text-500 text-sm mb-1">
+                                Address
+                            </div>
+                            <div class="text-xl font-semibold">
+                                <i class="pi pi-map-marker mr-1"></i> #{orderBean.getCustomerAddress()}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p:card>
+
+                <p:card title="Order Items" styleClass="mb-4">
+
+                    <p:dataTable value="#{orderBean.orderItems}"
+                                 var="item"
+                                 rowIndexVar="index"
+                                 styleClass="w-full m-0">
+
+                        <!-- ORDER ITEM NUMBER -->
+                        <p:column headerText="Number" class="px-3">
+                            #{index + 1}
+                        </p:column>
+
+                        <!-- PRODUCT IMAGE -->
+                        <p:column headerText="Image" style="width:5rem">
+                            <h:graphicImage value="#{orderBean.getOrderItemImage(item.productId)}"
+                                            style="width:5rem;height:5rem"/>
+                        </p:column>
+
+                        <p:column headerText="Product Id">
+                            #{item.productId}
+                        </p:column>
+
+                        <!-- PRODUCT NAME -->
+                        <p:column headerText="Name"
+                                  styleClass="white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                            #{item.productName}
+                        </p:column>
+
+                        <!-- PRICE -->
+                        <p:column headerText="Price">
+                            $ 
+                            <h:outputText value="#{item.price}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <!-- QUANTITY -->
+                        <p:column headerText="Quantity">
+                            #{item.quantity}
+                        </p:column>
+
+                        <!-- SUBTOTAL -->
+                        <p:column headerText="Subtotal">
+                            $ 
+                            <h:outputText value="#{item.price * item.quantity}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:card>
+            </div>
+
+            <div class="col-3">
+                <div style="margin-top: 20px; margin-bottom: 20px">
+                <p:link outcome="/views/employee/view-orders">
+                    <p:button value="Back to Orders" icon="pi pi-arrow-left"/>
+                </p:link>
+                    </div>
+
+                <h:form>
+                    <!-- UPDATE ORDER STATUS -->
+                    <p:card title="Update Order Status" styleClass="mb-4">
+
+                        <p:selectOneMenu value="#{orderBean.selectedOrder.orderStatus}" style="width:100%">
+                            <f:selectItem itemLabel="Pending" itemValue="PENDING"/>
+                            <f:selectItem itemLabel="Processing" itemValue="PROCESSING"/>
+                            <f:selectItem itemLabel="Shipped" itemValue="SHIPPED"/>
+                            <f:selectItem itemLabel="Completed" itemValue="COMPLETED"/>
+                            <f:selectItem itemLabel="Cancel" itemValue="CANCELLED"/>
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Update"
+                                         icon="pi pi-check"
+                                         action="#{orderBean.updateOrderStatus}"
+                                         update="orderInfo :messages"
+                                         class="w-full mt-3"/>
+                    </p:card>
+
+
+
+                    <!-- UPDATE PAYMENT STATUS -->
+                    <p:card title="Update Payment Status">
+
+                        <p:selectOneMenu value="#{orderBean.selectedOrder.paymentStatus}" style="width:100%">
+                            <f:selectItem itemLabel="Paid" itemValue="PAID"/>
+                            <f:selectItem itemLabel="Unpaid" itemValue="UNPAID"/>
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Update"
+                                         icon="pi pi-check"
+                                         action="#{orderBean.updatePaymentStatus}"
+                                         update="orderInfo :messages"
+                                         class="w-full mt-3"/>
+                    </p:card>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

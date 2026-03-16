@@ -14,4 +14,5 @@ public interface UserDAO {
     User login(String email, String password) throws Exception;
     int register(User user) throws Exception;
     User findByEmail(String email) throws Exception;
+    User findById(int id) throws Exception;
 }
