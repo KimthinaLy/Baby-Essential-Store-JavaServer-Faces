@@ -43,7 +43,7 @@ public class AuthBean implements Serializable {
                         .put("user", loggedUser);
 
                 if (loggedUser.getRole().equals("ADMIN")) {
-                    return "/views/admin/dashboard?faces-redirect=true";
+                    return "/views/admin/manage-users?faces-redirect=true";
                 }
 
                 if (loggedUser.getRole().equals("MANAGER")) {

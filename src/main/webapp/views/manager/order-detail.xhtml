@@ -21,23 +21,7 @@
 
     <!-- SIDEBAR MENU -->
     <ui:define name="menu">
-        <h:form>
-            <p:menu styleClass="w-full border-none">
-                <p:menuitem value="View Product"
-                            icon="pi pi-box"
-                            outcome="/views/employee/product-list"/>
-
-                <p:menuitem value="Manage Orders"
-                            icon="pi pi-shopping-cart"
-                            outcome="/views/employee/view-orders"/>
-                <p:separator/>
-            </p:menu>
-
-            <p:commandButton value="Logout"
-                             action="#{authBean.logout}"
-                             icon="pi pi-sign-out"
-                             styleClass="ui-button-danger"/>
-        </h:form>
+        <ui:include src="/components/manager-menu.xhtml"/>
     </ui:define>
 
 

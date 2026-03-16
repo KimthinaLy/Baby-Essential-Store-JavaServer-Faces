@@ -42,7 +42,7 @@ public class OrderBean implements Serializable {
     ProductDAO productDAO = new ProductDAOImpl();
     UserDAO userDAO = new UserDAOImpl();
     AddressDAO addressDAO = new AddressDAOImpl();
-    
+
     private List<Order> orders = new ArrayList<>(); //by user id
     private List<OrderItem> orderItems;
     private List<Order> allOrders = new ArrayList<>(); //all orders from all user
@@ -152,7 +152,7 @@ public class OrderBean implements Serializable {
         try {
 
             orderDAO.deleteOrder(orderId);
-            
+
             allOrders = orderDAO.getAllOrders();
             orders.removeIf(o -> o.getOrderId() == orderId);
 
@@ -211,13 +211,25 @@ public class OrderBean implements Serializable {
     }
 
     public String manageOrder(int orderId) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        User user = (User) context
+                .getExternalContext()
+                .getSessionMap()
+                .get("user");
+
         try {
             orderItems = orderItemDAO.getItemsByOrderId(orderId);
             selectedOrder = getSelectedOrderById(orderId);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "/views/employee/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;
+
+        if ("MANAGER".equals(user.getRole())) {
+            return "/views/manager/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;
+        } else {
+            return "/views/employee/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;
+        }
+
     }
 
     public Order getSelectedOrderById(int orderId) {
@@ -235,8 +247,8 @@ public class OrderBean implements Serializable {
         return selectedOrder;
     }
 
-    public User getOrderCustomer(){
-        
+    public User getOrderCustomer() {
+
         try {
             return userDAO.findById(selectedOrder.getUserId());
         } catch (Exception e) {
@@ -244,8 +256,8 @@ public class OrderBean implements Serializable {
         }
         return null;
     }
-    
-    public String getCustomerAddress(){
+
+    public String getCustomerAddress() {
         try {
             Address address = addressDAO.getAddressById(selectedOrder.getAddressId());
             String adr = address.getStreet() + ", " + address.getCity() + ", " + address.getProvince() + ", " + address.getPostalCode() + ".";

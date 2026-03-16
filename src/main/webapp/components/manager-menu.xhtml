@@ -1,35 +1,27 @@
 <ui:composition
-    template="/templates/staff-layout.xhtml"
-
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:h="jakarta.faces.html"
     xmlns:f="jakarta.faces.core"
     xmlns:p="http://primefaces.org/ui">
-
-    <!-- HEADER -->
-    <ui:define name="header">
-        <div class="flex align-items-center justify-content-between w-full px-3">
-
-            <h3 class="m-0">
-                Welcome, #{authBean.user.fullName} 👋
-            </h3>
-
-        </div>
-    </ui:define>
-
-
-    <!-- SIDEBAR MENU -->
-    <ui:define name="menu">
-        <h:form>
+        
+    <h:form>
             <p:menu styleClass="w-full border-none">
-                <p:menuitem value="View Product"
+                <p:menuitem value="Manage Product"
                             icon="pi pi-box"
-                            outcome="/views/employee/product-list"/>
+                            outcome="/views/manager/manage-products"/>
 
                 <p:menuitem value="Manage Orders"
                             icon="pi pi-shopping-cart"
                             outcome="/views/employee/view-orders"/>
+
+                <p:menuitem value="Manage Categories"
+                            icon="pi pi-tags"
+                            outcome="/views/manager/manage-categories"/>
+
+                <p:menuitem value="Manage Occasions"
+                            icon="pi pi-calendar"
+                            outcome="/views/manager/manage-occasions"/>
                 <p:separator/>
             </p:menu>
 
@@ -38,12 +30,4 @@
                              icon="pi pi-sign-out"
                              styleClass="ui-button-danger"/>
         </h:form>
-    </ui:define>
-
-
-    <!-- CONTENT -->
-    <ui:define name="content">
-        <ui:include src="/components/order-detail.xhtml"/>
-    </ui:define>
-
 </ui:composition>
