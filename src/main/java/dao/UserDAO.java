@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.User;
 
 /**
@@ -15,4 +16,7 @@ public interface UserDAO {
     int register(User user) throws Exception;
     User findByEmail(String email) throws Exception;
     User findById(int id) throws Exception;
+    List<User> getAllUsers() throws Exception;
+    void updateUser(User user) throws Exception;
+    void deleteUser(int userId) throws Exception;
 }

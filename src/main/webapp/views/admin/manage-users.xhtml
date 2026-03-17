@@ -50,42 +50,42 @@
                     <p:toolbarGroup>
                         <p:commandButton value="New" 
                                          icon="pi pi-plus" 
-                                         update="dt-products messages"  
-                                         actionListener="#{productBean.openNew}"
-                                         oncomplete="PF('manageProductDialog').show()"
+                                         update="dt-users messages :dialogs:manage-user-content"  
+                                         actionListener="#{userBean.openNew}"
+                                         oncomplete="PF('manageUserDialog').show()"
                                          styleClass="ui-button-success" 
                                          style="margin-right: .5rem">
-                            <p:resetInput target=":dialogs:manage-product-content" />
+                            <p:resetInput target=":dialogs:manage-user-content" />
                         </p:commandButton>
                         <p:commandButton id="delete-products-button" 
                                          value="Delete"
                                          icon="pi pi-trash" 
-                                         actionListener="#{productBean.deleteSelectedProducts}"
+                                         actionListener="#{userBean.deleteSelectedUsers}"
                                          styleClass="ui-button-danger" 
-                                         disabled="#{empty productBean.selectedProducts}" 
-                                         update="dt-products messages">
-                            <p:confirm header="Confirmation" message="Delete the selected products?"
+                                         disabled="#{empty userBean.selectedUsers}" 
+                                         update="dt-users messages">
+                            <p:confirm header="Confirmation" message="Delete the selected users?"
                                        icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
 
-                <p:dataTable id="dt-products" 
+                <p:dataTable id="dt-users" 
                              widgetVar="dtProducts" 
-                             var="product" 
-                             value="#{productBean.products}"
+                             var="user" 
+                             value="#{userBean.users}"
                              reflow="true" 
                              styleClass="products-table" 
                              selectionMode="multiple" 
-                             selection="#{productBean.selectedProducts}"
-                             rowKey="#{product.productId}" 
+                             selection="#{userBean.selectedUsers}"
+                             rowKey="#{user.userId}" 
                              paginator="true" 
                              rows="10" 
                              selectionRowMode="add" 
                              paginatorPosition="bottom">
                     <f:facet name="header">
                         <div class="products-table-header">
-                            <span style="font-weight: bold">PRODUCTS</span>
+                            <span style="font-weight: bold">Users</span>
                             <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
                                 <p:inputText id="globalFilter" onkeyup="PrimeFaces.debounce(() => PF('dtProducts').filter())" placeholder="Search" />
                             </span>
@@ -100,42 +100,38 @@
 
                     <p:column selectionBox="true" exportable="false"></p:column>
 
-                    <p:column headerText="Id" sortBy="#{product.productId}" filterBy="#{product.productId}">
-                        <h:outputText value="#{product.productId}" />
+                    <p:column headerText="User Id" sortBy="#{user.userId}" filterBy="#{user.userId}">
+                        <h:outputText value="#{user.userId}" />
                     </p:column>
-                    <p:column headerText="Name" sortBy="#{product.name}" filterBy="#{product.name}">
-                        <h:outputText value="#{product.name}" />
+                    <p:column headerText="Full Name" sortBy="#{user.fullName}" filterBy="#{user.fullName}">
+                        <h:outputText value="#{user.fullName}" />
                     </p:column>
-                    <p:column headerText="Image" exportable="false">
-                        <h:graphicImage value="#{product.productImage}"  styleClass="product-image" style="width:5rem;height:5rem"/>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{user.email}" />
                     </p:column>
-                    <p:column headerText="Price" sortBy="#{product.price}">
-                        <h:outputText value="#{product.price}" style="font-weight: 700">
-                            <f:convertNumber currencySymbol="$" type="currency" />
-                        </h:outputText>
+                    <p:column headerText="Phone">
+                        <h:outputText value="#{user.phone}"/>
                     </p:column>
-                    <p:column headerText="Stock" sortBy="#{product.quantityOnHand}">
-                        <h:outputText value="#{product.quantityOnHand}" />
+                    <p:column headerText="Role" sortBy="#{user.role}" filterBy="#{user.role}">
+                        <h:outputText value="#{user.role}" />
                     </p:column>
-                    <p:column headerText="Category" sortBy="#{product.categoryName}" filterBy="#{product.categoryName}">
-                        <h:outputText value="#{product.categoryName}" />
-                    </p:column>
-                    <p:column headerText="Occasion" sortBy="#{product.occasionNames}" filterBy="#{product.occasionNames}">
-                        <h:outputText value="#{product.occasionNames}" />
+
+                    <p:column headerText="Address">
+                        <h:outputText value="#{addressBean.getAddressLineByUserId(user.userId)}" />
                     </p:column>
 
                     <p:column exportable="false" ariaHeaderText="Actions">
                         <p:commandButton icon="pi pi-pencil" 
-                                         update=":dialogs:manage-product-content"
-                                         oncomplete="PF('manageProductDialog').show()"
+                                         update=":dialogs:manage-user-content"
+                                         oncomplete="PF('manageUserDialog').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <f:setPropertyActionListener value="#{product}" target="#{productBean.product}" />
-                            <p:resetInput target=":dialogs:manage-product-content" />
+                            <f:setPropertyActionListener value="#{user}" target="#{userBean.user}" />
+                            <p:resetInput target=":dialogs:manage-user-content" />
                         </p:commandButton>
                         <p:commandButton styleClass="ui-button-warning rounded-button" icon="pi pi-trash"
                                          process="@this"
                                          oncomplete="PF('deleteProductDialog').show()">
-                            <f:setPropertyActionListener value="#{product}" target="#{productBean.product}" />
+                            <f:setPropertyActionListener value="#{user}" target="#{userBean.user}" />
                         </p:commandButton>
                     </p:column>
 
@@ -143,64 +139,79 @@
             </h:form>
 
             <h:form id="dialogs">
-                <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
-                          responsive="true">
-                    <p:outputPanel id="manage-product-content" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty productBean.product}">
-                            <h:graphicImage value="#{productBean.product.productImage}"  styleClass="product-image" 
-                                            rendered="#{not empty productBean.product.productImage}" 
-                                            style="width:5rem;height:5rem"/>
+                <p:dialog header="User Infomation" showEffect="fade" modal="true" widgetVar="manageUserDialog"
+                          responsive="true"  style="max-height:500px; overflow-y:auto;">
+                    <p:outputPanel id="manage-user-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty userBean.user}">
                             <div class="field">
-                                <p:outputLabel for="name">Name</p:outputLabel>
-                                <p:inputText id="name" value="#{productBean.product.name}" required="true" />
+                                <p:outputLabel for="name">Full Name</p:outputLabel>
+                                <p:inputText id="name" value="#{userBean.user.fullName}" required="true" />
                             </div>
                             <div class="field">
-                                <p:outputLabel for="description">Description</p:outputLabel>
-                                <p:inputTextarea id="description" value="#{productBean.product.description}" />
+                                <p:outputLabel for="email">Email</p:outputLabel>
+                                <p:inputText id="email" value="#{userBean.user.email}" required="true" />
                             </div>
                             <div class="field">
-                                <p:outputLabel for="category" value="Category"/>
-
-                                <p:selectOneMenu id="category"
-                                                 value="#{productBean.product.categoryId}"
-                                                 style="width:100%">
-
-                                    <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true"/>
-
-                                    <f:selectItems value="#{productBean.categories}"
-                                                   var="c"
-                                                   itemLabel="#{c.categoryName}"
-                                                   itemValue="#{c.categoryId}" />
-
-                                </p:selectOneMenu>
+                                <p:outputLabel for="pw">Password</p:outputLabel>
+                                <p:inputText id="pw" value="#{userBean.user.password}" required="true" />
                             </div>
+                            <div class="field">
+                                <p:outputLabel for="phone">Phone</p:outputLabel>
+                                <p:inputMask id="phone" value="#{userBean.user.phone}"  mask="(999) 999-9999" validateMask="true" required="true"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="role">Role</p:outputLabel>
+                                <p:inputText id="role" value="#{userBean.user.role}"/>
+                            </div>
+
                             <div class="formgrid grid">
                                 <div class="field col">
-                                    <p:outputLabel for="price">Price</p:outputLabel>
-                                    <p:inputNumber id="price" value="#{productBean.product.price}" symbol=" USD"
-                                                   symbolPosition="s" decimalSeparator="." thousandSeparator="," />
+                                    <p:outputLabel for="receiverName">Receiver Name</p:outputLabel>
+                                    <p:inputText id="receiverName" value="#{userBean.address.receiverName}"/>
                                 </div>
                                 <div class="field col">
-                                    <p:outputLabel for="quantity">Quantity</p:outputLabel>
-                                    <p:spinner id="quantity" min="0" value="#{productBean.product.quantityOnHand}" />
+                                    <p:outputLabel for="receiverPhone">Receiver Phone</p:outputLabel>
+                                    <p:inputMask id="receiverPhone" value="#{userBean.address.phone}"  mask="(999) 999-9999" validateMask="true" required="true"/>
+                                </div>
+                            </div>
+
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <p:outputLabel for="street">Street</p:outputLabel>
+                                    <p:inputText id="street" value="#{userBean.address.street}"/>
+                                </div>
+                                <div class="field col">
+                                    <p:outputLabel for="city">City</p:outputLabel>
+                                    <p:inputText id="city" value="#{userBean.address.city}"/>
+                                </div>
+                            </div>
+
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <p:outputLabel for="province">Province</p:outputLabel>
+                                    <p:inputText id="province" value="#{userBean.address.province}"/>
+                                </div>
+                                <div class="field col">
+                                    <p:outputLabel for="postalCode">Postal Code</p:outputLabel>
+                                    <p:inputText id="postalCode" value="#{userBean.address.postalCode}"/>
                                 </div>
                             </div>
                         </p:outputPanel>
                     </p:outputPanel>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{productBean.save}"
-                                         update=":form:dt-products messages manage-product-content" process="manage-product-content @this" 
-                                         oncomplete="PF('manageProductDialog').hide()"/>
-                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{userBean.save}"
+                                         update=":form:dt-users messages manage-user-content" process="manage-user-content @this" 
+                                         oncomplete="PF('manageUserDialog').hide()"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
                                          class="ui-button-secondary" type="button" />
                     </f:facet>
                 </p:dialog>
 
                 <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
-                                 message="Delete the product?" header="Confirm" severity="warn">
-                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{productBean.delete(productBean.product.productId)}"
-                                     process="@this" update=":form:dt-products messages"
+                                 message="Delete this user?" header="Confirm" severity="warn">
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{userBean.deleteUser(userBean.user.userId)}"
+                                     process="@this" update=":form:dt-users messages"
                                      oncomplete="PF('deleteProductDialog').hide()" />
                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                      onclick="PF('deleteProductDialog').hide()" />

@@ -161,7 +161,7 @@
             </p:dialog>
 
             <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
-                             message="Delete the product?" header="Confirm" severity="warn">
+                             message="Delete this user?" header="Confirm" severity="warn">
                 <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{productBean.delete(productBean.product.productId)}"
                                  process="@this" update=":form:dt-products messages"
                                  oncomplete="PF('deleteProductDialog').hide()" />

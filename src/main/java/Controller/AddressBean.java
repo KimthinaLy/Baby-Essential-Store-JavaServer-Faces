@@ -33,12 +33,36 @@ public class AddressBean implements Serializable{
        try{
              address = addressDAO.getAddressByUser(user.getUserId());
        }catch (Exception e){
-       
+           e.printStackTrace();
        } 
         return address;   
     }
 
     public void setAddress(Address address) {
         this.address = address;
-    }   
+    }
+    
+    public Address getAddressByUserId(int userId){
+        try{
+            address = addressDAO.getAddressByUser(userId);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return address;
+    }
+    
+     public String getAddressLineByUserId(int userId){
+         String adr="";
+        try{
+            address = addressDAO.getAddressByUser(userId);
+             adr = address.getStreet() + ", " + address.getCity() + ", " + address.getProvince() + ", " + address.getPostalCode() + ".";
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        if ("".equals(adr))
+            return "---";
+        else
+            return adr;
+    }
 }
