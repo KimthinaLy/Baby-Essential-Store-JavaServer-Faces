@@ -42,8 +42,6 @@ public class ProductBean implements Serializable {
     private List<Product> selectedProducts;
 
     private String searchKeyword;
-    private Integer selectedProductId;
-    private Product selectedProduct;
 
     @PostConstruct
     public void init() {
@@ -202,13 +200,7 @@ public class ProductBean implements Serializable {
     }
 
     //=================== Search ======================
-    public Product getSelectedProduct() {
-        return selectedProduct;
-    }
-
-    public void setSelectedProduct(Product selectedProduct) {
-        this.selectedProduct = selectedProduct;
-    }
+    
 
     public String getSearchKeyword() {
         return searchKeyword;
@@ -217,47 +209,6 @@ public class ProductBean implements Serializable {
     public void setSearchKeyword(String searchKeyword) {
         this.searchKeyword = searchKeyword;
     }
-
-    public Integer getSelectedProductId() {
-        return selectedProductId;
-    }
-
-    public void setSelectedProductId(Integer selectedProductId) {
-        this.selectedProductId = selectedProductId;
-    }
-
-    public List<Product> completeProduct(String query) {
-
-        try {
-            return productDAO.searchByName(query);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
-
-    public void selectProduct(SelectEvent<Product> event) {
-        Product p = event.getObject();
-        try {
-            FacesContext.getCurrentInstance()
-                    .getExternalContext()
-                    .redirect("product-detail.xhtml?id=" + p.getProductId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void searchProducts() {
-
-        try {
-            FacesContext.getCurrentInstance()
-                    .getExternalContext()
-                    .redirect("products.xhtml?keyword=" + searchKeyword);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void loadSearchProducts() {
 
         try {

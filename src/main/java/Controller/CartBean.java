@@ -147,14 +147,18 @@ public class CartBean implements Serializable {
                     .getSessionMap()
                     .get("user");
             int userId = user.getUserId();
-
+            
+            System.out.println("============== qty  = " + item.getQuantity());
             Cart cart = cartDAO.getCartByUserId(userId);
 
-            cartItemDAO.updateQuantity(item.getCartItemId(), item.getQuantity());
+            cartItemDAO.updateQuantity(item.getCartItemId(), 3);
             cartItems = cartItemDAO.getCartItems(cart.getCartId());
 
         } catch (Exception e) {
             e.printStackTrace();
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Delete Failed", null));
         }
     }
 
@@ -181,7 +185,9 @@ public class CartBean implements Serializable {
             cartItemDAO.removeItem(cartItemId);
             cartItems = cartItemDAO.getCartItems(cart.getCartId());
         } catch (Exception e) {
-
+              FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Delete Failed", null));
         }
     }
 
@@ -197,4 +203,4 @@ public class CartBean implements Serializable {
 
         return total;
     }
-}
+    }

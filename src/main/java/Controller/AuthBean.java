@@ -10,6 +10,7 @@ import dao.UserDAO;
 import dao.UserDAOImpl;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import model.User;
 

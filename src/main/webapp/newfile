@@ -1,0 +1,19 @@
+
+                <p:autoComplete
+                    value="#{productBean.selectedProduct}"
+                    completeMethod="#{productBean.completeProduct}" 
+                    var="p"
+                    itemLabel="#{p.name}" 
+                    itemValue="#{p}"
+                    placeholder="Search product by name..."
+                    styleClass="w-full">
+
+                    <!-- select suggestion -->
+                    <p:ajax event="itemSelect"
+                            listener="#{productBean.selectProduct}"/>
+
+                    <!-- search by typing -->
+                    <p:ajax event="query"
+                            listener="#{productBean.searchProducts}"/>
+
+                </p:autoComplete>

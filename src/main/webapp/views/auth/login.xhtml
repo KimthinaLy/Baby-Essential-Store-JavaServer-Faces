@@ -12,10 +12,9 @@
     </h:head>
     <h:body>
         <div class="flex justify-content-center align-items-center" style="height:100vh">
-            
             <h:form>
                 <p:panel header="Login" style="width: 100vw; max-width:500px;">
-                    <p:messages/>
+                  
 
                     <div class="p-fluid">
                         <h5><p:outputLabel for="@next" value="Enter Email"/></h5>
@@ -25,8 +24,9 @@
                         <h5><p:outputLabel for="@next" value="Enter Password"/></h5>
                         <p:password id="password" value="#{authBean.user.password}"  redisplay="true" placeholder="Password"
                                     required="true" requiredMessage="Password is required" styleClass="w-full" />
-                        <br/><br/>
-
+                        <br/>
+                        <p:link value="Forget Password"
+                                outcome="/views/auth/login" styleClass="underline"/><br/><br/>
                         <p:commandButton
                             value="Login"
                             icon="pi pi-sign-in"
@@ -36,6 +36,7 @@
 
                         <p:link value="Register"
                                 outcome="/views/auth/register"/>
+                         
                         
                     </div>
                 </p:panel>

@@ -8,6 +8,7 @@
     xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
+        <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);"></h:form>
         <div class="grid justify-content-center min-h-screen" style="padding-top: 10vh">
             <div class="col-12 lg:col-10 p-0">
 
@@ -63,8 +64,9 @@
                                 <p:commandButton value="Update"
                                                  icon="pi pi-refresh"
                                                  action="#{cartBean.updateItem(item)}"
-                                                 update="qty"
-                                                 styleClass="p-button-sm"/> 
+                                                 update="cartForm :messages"
+                                                 styleClass="p-button-sm">                                    
+                                </p:commandButton> 
 
                                 <p:commandButton value="Delete"
                                                  icon="pi pi-trash"

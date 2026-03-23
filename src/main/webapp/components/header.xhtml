@@ -26,34 +26,12 @@
         <!-- CENTER SEARCH BAR -->
         <div class="flex align-items-center w-4">
             <h:form class="flex align-items-center w-full">
-
-
-                <p:autoComplete
-                    value="#{productBean.selectedProduct}"
-                    completeMethod="#{productBean.completeProduct}" 
-                    var="p"
-                    itemLabel="#{p.name}" 
-                    itemValue="#{p}"
-                    placeholder="Search product by name..."
-                    styleClass="w-full">
-
-                    <!-- select suggestion -->
-                    <p:ajax event="itemSelect"
-                            listener="#{productBean.selectProduct}"/>
-
-                    <!-- search by typing -->
-                    <p:ajax event="query"
-                            listener="#{productBean.searchProducts}"/>
-
-                </p:autoComplete>
-
-                <!-- comment 
                 <div class="ui-inputgroup w-full">
                     <div class="ui-inputgroup-addon flex align-items-center justify-content-center bg-white"><i class="pi pi-search text-primary"></i></div>
-                    <p:inputText placeholder="Search product by name..." styleClass="w-full"/>
-                </div>-->
-
-
+                    <p:inputText placeholder="Search product by name..." styleClass="w-full" value="#{productBean.searchKeyword}">
+                        <p:ajax event="keyup" update="productGrid" listener="#{productBean.loadSearchProducts}"/>
+                    </p:inputText>
+                </div>
             </h:form>
         </div>
 
@@ -97,9 +75,6 @@
                     <p:link outcome="/views/auth/login">
                         <p:button value="Login" icon="pi pi-sign-in"/>
                     </p:link>
-
-
-
                 </h:panelGroup>
             </h:form>
         </div>
