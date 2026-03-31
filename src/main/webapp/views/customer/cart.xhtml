@@ -39,8 +39,25 @@
 
                         <!-- QUANTITY -->
                         <p:column headerText="Quantity" style="width:140px">
-                            <p:spinner id="qty" value="#{item.quantity}" min="1" max="99">
-                            </p:spinner>
+                            <div class="flex align-items-center gap-2">
+
+                                <p:commandButton icon="pi pi-minus"
+                                                 action="#{cartBean.updateItem(item.cartItemId, item.quantity-1)}"
+                                                 update="cartForm"
+                                                 process="@this"
+                                                 style="width: 2rem; height: 2rem;"
+                                                 disabled="#{item.quantity le 1}" />
+
+                                <h:outputText value="#{item.quantity}" styleClass="font-bold text-lg" />
+
+                                <p:commandButton icon="pi pi-plus"
+                                                 action="#{cartBean.updateItem(item.cartItemId, item.quantity+1)}"
+                                                 update="cartForm"
+                                                 process="@this"
+                                                 style="width: 2rem; height: 2rem;"
+                                                 disabled="#{item.quantity ge 99}" />
+
+                            </div>
                         </p:column>
 
                         <!-- PRICE -->
@@ -60,14 +77,6 @@
                         <p:column headerText="Action" style="width:200px">
 
                             <div class="flex gap-2">
-
-                                <p:commandButton value="Update"
-                                                 icon="pi pi-refresh"
-                                                 action="#{cartBean.updateItem(item)}"
-                                                 update="cartForm :messages"
-                                                 styleClass="p-button-sm">                                    
-                                </p:commandButton> 
-
                                 <p:commandButton value="Delete"
                                                  icon="pi pi-trash"
                                                  action="#{cartBean.removeItem(item.cartItemId)}"
@@ -83,7 +92,7 @@
                     <!-- TOTAL PRICE -->
                     <div class="flex justify-content-end mt-3 text-lg font-bold">
                         Total: $
-                        <h:outputText value="#{cartBean.selectedTotal}" styleClass="text-lg font-bold">
+                        <h:outputText  id="totalPrice" value="#{cartBean.selectedTotal}" styleClass="text-lg font-bold">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
                         </h:outputText>
                     </div>
@@ -94,7 +103,7 @@
                         <p:commandButton value="Delete Selected"
                                          icon="pi pi-trash"
                                          action="#{cartBean.deleteSelected}"
-                                         update="cartForm"
+                                         update="cartForm "
                                          styleClass="p-button-danger"/>
 
                         <p:commandButton value="Checkout Selected"

@@ -21,37 +21,13 @@
 
     <!-- SIDEBAR MENU -->
     <ui:define name="menu">
-        <h:form>
-            <p:menu styleClass="w-full border-none">
-                <p:menuitem value="Manage Product"
-                            icon="pi pi-box"
-                            outcome="/views/manager/manage-products"/>
-
-                <p:menuitem value="Manage Orders"
-                            icon="pi pi-shopping-cart"
-                            outcome="/views/employee/view-orders"/>
-                
-                <p:menuitem value="Manage Categories"
-                            icon="pi pi-tags"
-                            outcome="/views/manager/manage-categories"/>
-                
-                <p:menuitem value="Manage Occasions"
-                            icon="pi pi-calendar"
-                            outcome="/views/manager/manage-occasions"/>
-                <p:separator/>
-            </p:menu>
-            
-            <p:commandButton value="Logout"
-                                     action="#{authBean.logout}"
-                                     icon="pi pi-sign-out"
-                                     styleClass="ui-button-danger"/>
-        </h:form>
+        <ui:include src="/components/manager-menu.xhtml"/>
     </ui:define>
 
 
     <!-- CONTENT -->
     <ui:define name="content">
-
+ <h2>Coming Soon ...</h2>
     </ui:define>
 
 </ui:composition>

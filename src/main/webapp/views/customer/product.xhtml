@@ -7,6 +7,19 @@
     xmlns:f="jakarta.faces.core"
     xmlns:p="http://primefaces.org/ui">
 
+    <ui:define name="headerSearch">
+        <div class="flex align-items-center w-4">
+            <h:form class="flex align-items-center w-full">
+                <div class="ui-inputgroup w-full">
+                    <div class="ui-inputgroup-addon flex align-items-center justify-content-center bg-white"><i class="pi pi-search text-primary"></i></div>
+                    <p:inputText placeholder="Search product by name..." styleClass="w-full" value="#{productBean.searchKeyword}">
+                        <p:ajax event="keyup" update="productGrid" listener="#{productBean.loadSearchProducts}"/>
+                    </p:inputText>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+    
     <ui:define name="content">
         <div style="min-height: 100vh">
         <div class=" overflow-y-auto fixed" style="height: 100vh; width: clamp(220px, 25vw, 320px); padding-top: 10vh; padding-bottom: 5vh">
@@ -84,7 +97,6 @@
                         <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 
 
                             <!-- CLICKABLE PRODUCT IMAGE -->
-                            <h:link outcome="/views/customer/product-detail">
                                 <f:param name="id" value="#{p.productId}" />
                                 <h:graphicImage value="#{p.getProductImage()}" 
                                                 style="max-width: 100%;
@@ -92,7 +104,6 @@
                                                 height: auto;
                                                 object-fit: cover;"
                                                 styleClass="border-round-md"/>
-                            </h:link>
 
                             <!-- ADD TO CART -->
                             <p:commandButton value="Add To Cart"
@@ -102,10 +113,10 @@
                                              update=":globalForm:messages"
                                              styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>
                             <!-- PRODUCT NAME -->
-                            <h:link outcome="/views/customer/product-detail" styleClass="no-underline text-lg text-color font-bold">
+                            <div Class="no-underline text-lg text-color font-bold">
                                 <f:param name="id" value="#{p.productId}" />
                                 <div class="my-2 white-space-nowrap overflow-hidden text-overflow-ellipsis">#{p.name}</div>
-                            </h:link>
+                            </div>
                             <!-- PRODUCT PRICE -->
                             <h:outputText value="$#{p.price}"  styleClass="my-2 text-color-secondary font-bold"/>
 

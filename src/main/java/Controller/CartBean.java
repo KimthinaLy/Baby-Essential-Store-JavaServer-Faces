@@ -13,7 +13,6 @@ import dao.ProductDAOImpl;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class CartBean implements Serializable {
 //    private List<Product> cartList = new ArrayList<>();
     private List<CartItem> cartItems;
     private List<CartItem> selectedItems;
-
 
     public String addToCart(int productId) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -138,8 +136,7 @@ public class CartBean implements Serializable {
         }
     }
 
-    public void updateItem(CartItem item) {
-
+    public void updateItem(int itemId, int qty) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             User user = (User) context
@@ -147,18 +144,17 @@ public class CartBean implements Serializable {
                     .getSessionMap()
                     .get("user");
             int userId = user.getUserId();
-            
-            System.out.println("============== qty  = " + item.getQuantity());
+
             Cart cart = cartDAO.getCartByUserId(userId);
 
-            cartItemDAO.updateQuantity(item.getCartItemId(), 3);
+            cartItemDAO.updateQuantity(itemId, qty);
             cartItems = cartItemDAO.getCartItems(cart.getCartId());
 
         } catch (Exception e) {
             e.printStackTrace();
-             FacesContext.getCurrentInstance().addMessage(null,
+            FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Delete Failed", null));
+                            "Update Failed", null));
         }
     }
 
@@ -167,7 +163,6 @@ public class CartBean implements Serializable {
         if (selectedItems == null || selectedItems.isEmpty()) {
             return null;
         }
-
         return "/views/customer/checkout?faces-redirect=true";
 
     }
@@ -185,7 +180,7 @@ public class CartBean implements Serializable {
             cartItemDAO.removeItem(cartItemId);
             cartItems = cartItemDAO.getCartItems(cart.getCartId());
         } catch (Exception e) {
-              FacesContext.getCurrentInstance().addMessage(null,
+            FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Delete Failed", null));
         }
@@ -200,7 +195,6 @@ public class CartBean implements Serializable {
                 total += item.getProduct().getPrice() * item.getQuantity();
             }
         }
-
         return total;
     }
-    }
+}

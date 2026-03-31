@@ -11,9 +11,9 @@ import dao.OccasionDAOImpl;
 import dao.ProductDAO;
 import dao.ProductDAOImpl;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,14 +21,15 @@ import java.util.List;
 import model.Category;
 import model.Occasion;
 import model.Product;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
  * @author Admin
  */
 @Named("productBean")
-@ViewScoped
+@SessionScoped
 public class ProductBean implements Serializable {
 
     final private ProductDAO productDAO = new ProductDAOImpl();
@@ -46,6 +47,7 @@ public class ProductBean implements Serializable {
     @PostConstruct
     public void init() {
         try {
+            loadSearchProducts();
             products = productDAO.getAllProducts();
             categories = categoryDAO.getAllCategories();
             occasions = occasionDAO.getAllOccasions();
@@ -227,4 +229,17 @@ public class ProductBean implements Serializable {
             e.printStackTrace();
         }
     }
+    
+    
+    public void handleFileUpload(FileUploadEvent event) {
+    UploadedFile file = event.getFile();
+    if (file != null) {
+        // Set the byte array directly into your product object
+        this.product.setImage(file.getContent());
+        
+        FacesMessage message = new FacesMessage("Successful", file.getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        System.out.println("Uploaded: " + file.getFileName() + " Size: " + file.getSize());
+    }
+}
 }

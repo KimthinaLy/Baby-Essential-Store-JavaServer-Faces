@@ -59,7 +59,12 @@ public class ProductDAOImpl implements ProductDAO {
             ps.setInt(3, p.getQuantityOnHand());
             ps.setInt(4, p.getCategoryId());
             ps.setString(5, p.getDescription());
-            ps.setBytes(6, p.getImage());
+            // Handle the byte array
+            if (p.getImage() != null) {
+                ps.setBytes(6, p.getImage());
+            } else {
+                ps.setNull(6, java.sql.Types.BLOB);
+            }
 
             ps.executeUpdate();
         }

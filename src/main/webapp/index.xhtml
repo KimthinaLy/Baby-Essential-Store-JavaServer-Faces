@@ -1,16 +1,49 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-         <p:link value="Register"
-                                outcome="/views/auth/login"/>
-           <p:link value="Product"
-                                outcome="/views/customer/product"/>
-    </h:body>
-</html>
+<ui:composition template="/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:param name="bodyStyle"
+              value="background: url('#{resource['images:background.png']}') no-repeat center center fixed; background-size: cover;" />
+    <ui:param name="headerStyle" value="background: transparent;" />
+
+    <ui:define name="content">
+        <div class="flex align-items-center justify-content-start"
+             style="min-height:100vh; padding-top:80px;">
+
+            <div class="text-center p-8"
+                 style="max-width: 700px; width: 100%; ">
+
+                <h1 class="m-0 mb-3 text-7xl font-bold text-primary font-italic">
+                    Baby Essential
+                </h1>
+
+                <p class="text-2xl text-700 line-height-3 mb-5">
+                    Your trusted baby store for everyday essentials, comfort, and care.
+                    Discover quality products for your little one, from feeding and clothing
+                    to toys and nursery needs, all in one place.
+                </p>
+
+                <div class="flex justify-content-center gap-3 flex-wrap">
+                    <p:link outcome="/views/customer/product"
+                            styleClass="no-underline">
+                        <p:button value="Shop Now"
+                                  icon="pi pi-shopping-bag"
+                                  styleClass="p-button-raised p-button-lg" />
+                    </p:link>
+
+                    <p:link outcome="/views/auth/login"
+                            styleClass="no-underline">
+                        <p:button value="Log In"
+                                  icon="pi pi-sign-in"
+                                  styleClass="p-button-outlined p-button-lg " />
+                    </p:link>
+                </div>
+
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+

@@ -15,14 +15,87 @@
               href="#{resource['images:logo2.png']}" />
     </h:head>
 
-    <h:body class="flex flex-column min-h-screen surface-ground m-0">
+    <h:body class="flex flex-column min-h-screen surface-ground m-0"
+            style="#{bodyStyle}">
 
         <!-- HEADER -->
-        <ui:include src="/components/header.xhtml"/>
+        <div class="flex align-items-center justify-content-between px-5 py-1 shadow-2  z-5 fixed right-0 left-0 top-0" 
+             style="#{empty headerStyle ? 'background: white;' : headerStyle}">
+
+            <!-- LEFT SIDE -->
+            <div class="flex align-items-center gap-4">
+                <p:link outcome="/index" styleClass="flex align-items-center">
+                    <p:graphicImage name="logo2.png" height="60" library="images"/>
+                    <span class="text-primary text-xl font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                        Baby Essential
+                    </span>
+                </p:link>
+
+                <p:link outcome="/index" styleClass="flex align-items-center gap-2 no-underline text-color">
+                    <i class="pi pi-home text-primary"></i>
+                    <span class="text-primary">Home</span>
+                </p:link>
+
+                <p:link outcome="/views/customer/product"
+                        styleClass="flex align-items-center gap-2 no-underline text-color">
+                    <i class="pi pi-shopping-bag text-primary"></i>
+                    <span class="text-primary">Products</span>
+                </p:link>
+            </div>
+
+            <!-- CENTER SEARCH BAR -->
+            <ui:insert name="headerSearch">
+                <div class="flex align-items-center justify-content-center">
+                    <h:form id="defaultSearchForm" class="flex align-items-center w-full">
+                        <p:inputText value="#{productBean.searchKeyword}" placeholder="Search product by name..."/>
+                        <p:commandButton value="Search" 
+                                         action="/views/customer/product.xhtml?faces-redirect=truefaces-redirect=true"
+                                         ajax="false"/>
+                    </h:form>
+                </div>
+            </ui:insert>
+
+            <!-- RIGHT SIDE -->
+            <div class="flex align-items-center gap-3">
+                <p:link outcome="/views/customer/cart"
+                        styleClass="flex align-items-center gap-2 no-underline text-color">
+                    <i class="pi pi-shopping-cart text-primary"></i>
+                    <span class="text-primary">Cart</span>
+                </p:link>
+
+                <p:link outcome="/views/customer/order-history">
+                    <p:button value="Your Orders" icon="pi pi-shopping-bag"/>
+                </p:link>
+
+                <h:form styleClass="flex align-items-center gap-4">
+                    <h:panelGroup rendered="#{not empty sessionScope.user}">
+                        <p:link outcome="/views/profile/profile">
+                            <p:button value="Profile" icon="pi pi-user"/>
+                        </p:link>
+
+                        <p:commandButton value="Logout"
+                                         action="#{authBean.logout}"
+                                         icon="pi pi-sign-out"
+                                         styleClass="p-button-text"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{empty sessionScope.user}">
+                        <p:link outcome="/views/auth/register">
+                            <p:button value="Register" icon="pi pi-user-plus"/>
+                        </p:link>
+
+                        <p:link outcome="/views/auth/login">
+                            <p:button value="Login" icon="pi pi-sign-in"/>
+                        </p:link>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </div>
 
         <h:form id="globalForm">
             <p:growl id="messages" showDetail="true" life="3000"/>
         </h:form>
+
         <!-- PAGE CONTENT -->
         <div class="flex-grow-1 p-2">
 

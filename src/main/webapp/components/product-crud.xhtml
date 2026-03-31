@@ -6,7 +6,7 @@
     xmlns:p="http://primefaces.org/ui">
 
     <div class="card crud-demo">
-        <h:form id="form">
+        <h:form id="form" enctype="multipart/form-data">
             <p:growl id="messages" showDetail="true" />
 
             <p:toolbar>
@@ -105,14 +105,24 @@
             </p:dataTable>
         </h:form>
 
-        <h:form id="dialogs">
+        <h:form id="dialogs" enctype="multipart/form-data">
             <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
-                      responsive="true">
+                      responsive="true"   style="max-height: 600px; overflow-y: auto">
                 <p:outputPanel id="manage-product-content" class="ui-fluid">
                     <p:outputPanel rendered="#{not empty productBean.product}">
-                        <h:graphicImage value="#{productBean.product.productImage}"  styleClass="product-image" 
-                                        rendered="#{not empty productBean.product.productImage}" 
-                                        style="width:5rem;height:5rem"/>
+                        <div class="field">
+                            <p:outputLabel value="Product Image" />
+                            <p:fileUpload listener="#{productBean.handleFileUpload}" 
+                                          mode="advanced"
+                                          multiple="false"
+                                          update="img-preview" >
+                                <p:validateFile sizeLimit="102400"  
+                            allowTypes="/(\.|\/)(gif|jpeg|jpg|png|webp)$/"/>
+                            </p:fileUpload>
+                            <h:graphicImage id="img-preview" value="#{productBean.product.productImage}"  styleClass="product-image" 
+                                            rendered="#{not empty productBean.product.productImage}" 
+                                            style="width:5rem;height:5rem"/>
+                        </div>
                         <div class="field">
                             <p:outputLabel for="name">Name</p:outputLabel>
                             <p:inputText id="name" value="#{productBean.product.name}" required="true" />
@@ -155,7 +165,7 @@
                     <p:commandButton value="Save" icon="pi pi-check" actionListener="#{productBean.save}"
                                      update=":form:dt-products messages manage-product-content" process="manage-product-content @this" 
                                      oncomplete="PF('manageProductDialog').hide()"/>
-                    <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                    <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()" actionListener="#{productBean.openNew}"
                                      class="ui-button-secondary" type="button" />
                 </f:facet>
             </p:dialog>
