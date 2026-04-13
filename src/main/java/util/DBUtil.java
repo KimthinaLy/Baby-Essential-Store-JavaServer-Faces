@@ -4,7 +4,8 @@
  */
 package util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
@@ -12,15 +13,21 @@ import java.sql.*;
  */
 public class DBUtil {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/babyessential?useSSL=false";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "01685027";
+    private static final String URL = System.getenv("DB_URL");
+    private static final String USERNAME = System.getenv("DB_USERNAME");
+    private static final String PASSWORD = System.getenv("DB_PASSWORD");
 
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            // Just for testing!
+            System.out.println("--- DB CONFIG CHECK ---");
+            System.out.println("User: " + System.getenv("DB_USERNAME"));
+            System.out.println("Pass: " + System.getenv("DB_PASSWORD"));
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException("Error initializing DBUtil: " + e.getMessage());
         }
     }
 

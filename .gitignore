@@ -1,1 +1,26 @@
-/target/
+# --- Sensitive Data ---
+# This matches the config file!
+config.properties
+.env
+
+# --- Compiled Java files ---
+*.class
+*.war
+*.ear
+*.jar
+
+# --- Maven ---
+target/
+
+# --- NetBeans Specific ---
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db

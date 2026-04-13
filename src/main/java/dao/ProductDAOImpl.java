@@ -26,7 +26,8 @@ public class ProductDAOImpl implements ProductDAO {
             ON p.category_id = c.category_id
             """;
 
-        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
 
                 Product p = new Product();
