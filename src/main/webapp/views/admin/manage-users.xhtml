@@ -10,33 +10,28 @@
     <!-- HEADER -->
     <ui:define name="header">
         <div class="flex align-items-center justify-content-between w-full px-3">
-
             <h3 class="m-0">
                 Welcome, #{authBean.user.fullName} 👋
             </h3>
-
         </div>
     </ui:define>
-
 
     <!-- SIDEBAR MENU -->
     <ui:define name="menu">
         <h:form>
+            <p:growl id="messages" showDetail="true" />
             <p:menu styleClass="w-full border-none">
-
                 <p:menuitem value="Manage Users"
                             icon="pi pi-users"
                             outcome="/views/admin/manage-users"/>
             </p:menu>
-
             <p:commandButton value="Logout"
                              action="#{authBean.logout}"
                              icon="pi pi-sign-out"
                              styleClass="ui-button-danger"/>
         </h:form>
     </ui:define>
-
-
+    
     <!-- CONTENT -->
     <ui:define name="content">
         <div class="card crud-demo">
@@ -96,7 +91,6 @@
                     <p:ajax event="toggleSelect" update=":form:delete-products-button" />
 
                     <p:column selectionBox="true" exportable="false"></p:column>
-
                     <p:column headerText="User Id" sortBy="#{user.userId}" filterBy="#{user.userId}">
                         <h:outputText value="#{user.userId}" />
                     </p:column>
@@ -112,11 +106,9 @@
                     <p:column headerText="Role" sortBy="#{user.role}" filterBy="#{user.role}">
                         <h:outputText value="#{user.role}" />
                     </p:column>
-
                     <p:column headerText="Address">
                         <h:outputText value="#{addressBean.getAddressLineByUserId(user.userId)}" />
                     </p:column>
-
                     <p:column exportable="false" ariaHeaderText="Actions">
                         <p:commandButton icon="pi pi-pencil" 
                                          update=":dialogs:manage-user-content"
@@ -131,7 +123,6 @@
                             <f:setPropertyActionListener value="#{user}" target="#{userBean.user}" />
                         </p:commandButton>
                     </p:column>
-
                 </p:dataTable>
             </h:form>
 
@@ -150,7 +141,10 @@
                             </div>
                             <div class="field">
                                 <p:outputLabel for="pw">Password</p:outputLabel>
-                                <p:inputText id="pw" value="#{userBean.user.password}" required="true" />
+                                <p:password id="pw" value="#{userBean.user.password}" required="true"
+                                             redisplay="false" toggleMask="true"
+                                             placeholder="Leave empty to keep current password"
+                                             styleClass="w-full"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="phone">Phone</p:outputLabel>
@@ -198,10 +192,10 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="Save" icon="pi pi-check" actionListener="#{userBean.save}"
-                                         update=":form:dt-users messages manage-user-content" process="manage-user-content @this" 
+                                         update=":form:dt-users messages manage-user-content dialogs" process="manage-user-content @this" 
                                          oncomplete="PF('manageUserDialog').hide()"/>
                         <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
-                                         class="ui-button-secondary" type="button" />
+                                         update="dialogs" class="ui-button-secondary" type="button" />
                     </f:facet>
                 </p:dialog>
 

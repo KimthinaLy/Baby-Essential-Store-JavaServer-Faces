@@ -33,15 +33,16 @@ public class AuthBean implements Serializable {
 
     public String login() {
         try {
-
             User loggedUser = userDAO.login(user.getEmail(), user.getPassword());
-            user = loggedUser;
-
             if (loggedUser != null) {
+                user = loggedUser;
                 FacesContext.getCurrentInstance()
                         .getExternalContext()
                         .getSessionMap()
                         .put("user", loggedUser);
+
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Login Success!"));
 
                 if (loggedUser.getRole().equals("ADMIN")) {
                     return "/views/admin/manage-users?faces-redirect=true";
@@ -56,13 +57,25 @@ public class AuthBean implements Serializable {
                 }
 
                 return "/views/customer/product?faces-redirect=true";
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Login Fail! Incorrect password or email.", null));
+                return null;
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        } catch (IllegalArgumentException e) {
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error", "Old password format detected. Please contact admin."));
         return null;
+    }
+        
+        catch (Exception e) {
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            e.getMessage(), null));
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String register() {
@@ -73,12 +86,18 @@ public class AuthBean implements Serializable {
 
             addressDAO.insertAddress(address);
             
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Registration Success!"));
+            
             return "/views/auth/login?faces-redirect=true";
             
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return null;
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Registration Fail.", null));
+            return null;
+        }       
     }
 
     public String logout() {
@@ -103,6 +122,5 @@ public class AuthBean implements Serializable {
     public void setAddress(Address address) {
         this.address = address;
     }
-    
     
 }

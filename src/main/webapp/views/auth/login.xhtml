@@ -13,9 +13,9 @@
     <h:body>
         <div class="flex justify-content-center align-items-center" style="height:100vh">
             <h:form>
+                <p:growl id="messages" showDetail="true" />
+                
                 <p:panel header="Login" style="width: 100vw; max-width:500px;">
-                  
-
                     <div class="p-fluid">
                         <h5><p:outputLabel for="@next" value="Enter Email"/></h5>
                             <p:inputText id="email" value="#{authBean.user.email}" required="true"
@@ -30,14 +30,11 @@
                         <p:commandButton
                             value="Login"
                             icon="pi pi-sign-in"
-                            action="#{authBean.login}" />
-                        
+                            update="@form"
+                            action="#{authBean.login}" />                
                         <p:separator/>
-
                         <p:link value="Register"
                                 outcome="/views/auth/register"/>
-                         
-                        
                     </div>
                 </p:panel>
             </h:form>

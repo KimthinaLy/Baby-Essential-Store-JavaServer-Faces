@@ -26,13 +26,10 @@ import model.User;
 @Named
 @SessionScoped
 public class UserBean implements Serializable {
-
     private List<User> users;
     private List<User> selectedUsers;
-
     private User user;
     private Address address;
-
     private UserDAO userDAO = new UserDAOImpl();
     private AddressDAO addressDAO = new AddressDAOImpl();
 
@@ -57,20 +54,19 @@ public class UserBean implements Serializable {
 
     // SAVE (Create or Update)
     public void save() {
-
         try {
-
             if (user.getUserId() == 0) {
                 // CREATE USER
+                
+                if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                throw new Exception("Password is required for new users!");
+               }
                 int userId = userDAO.register(user);
-
                 address.setUserId(userId);
                 addressDAO.insertAddress(address);
-
             } else {
                 // UPDATE USER
                 userDAO.updateUser(user);
-
                 if (address.getAddressId() == 0) {
                     address.setUserId(user.getUserId());
                     addressDAO.insertAddress(address);
@@ -93,22 +89,15 @@ public class UserBean implements Serializable {
 
     // DELETE ONE USER
     public void deleteUser(int userId) {
-
         try {
-
             Address a = addressDAO.getAddressByUser(userId);
-
             if (a != null) {
                 addressDAO.deleteAddress(a.getAddressId());
             }
-
             userDAO.deleteUser(userId);
-
             loadUsers();
-
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Delete Success!"));
-
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
@@ -119,24 +108,16 @@ public class UserBean implements Serializable {
 
     // DELETE MULTIPLE USERS
     public void deleteSelectedUsers() {
-
         try {
-
             for (User u : selectedUsers) {
-
                 Address a = addressDAO.getAddressByUser(u.getUserId());
-
                 if (a != null) {
                     addressDAO.deleteAddress(a.getAddressId());
                 }
-
                 userDAO.deleteUser(u.getUserId());
             }
-
             selectedUsers = new ArrayList<>();
-
             loadUsers();
-
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Delete Success!"));
         } catch (Exception e) {
@@ -168,7 +149,6 @@ public class UserBean implements Serializable {
         this.user = user;
         try {
             this.address = addressDAO.getAddressByUser(user.getUserId());
-
             if (address == null) {
                 address = new Address();
             }

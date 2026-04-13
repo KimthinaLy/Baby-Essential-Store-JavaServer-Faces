@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import util.DBUtil;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -25,7 +26,11 @@ public class UserDAOImpl implements UserDAO {
 
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            if (hashedPassword != null && hashedPassword.startsWith("$2a$")) {
+                hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2b\\$");
+            }
+            ps.setString(3, hashedPassword);
             ps.setString(4, user.getPhone());
             ps.setString(5, "CUSTOMER");
 
@@ -43,25 +48,29 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User login(String email, String password) throws Exception {
-        String sql = "SELECT * FROM user WHERE email=? AND password=?";
+        String sql = "SELECT * FROM user WHERE email=?";
 
         try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, password);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                User user = new User();
+                String storedHash = rs.getString("password");
 
-                user.setUserId(rs.getInt("user_id"));
-                user.setFullName(rs.getString("full_name"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
-                user.setPhone(rs.getString("phone"));
+                if (storedHash != null && storedHash.startsWith("$2b$")) {
+                    storedHash = storedHash.replaceFirst("\\$2b\\$", "\\$2a\\$");
+                }
 
-                return user;
+                if (BCrypt.checkpw(password, storedHash)) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setFullName(rs.getString("full_name"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(rs.getString("role"));
+                    user.setPhone(rs.getString("phone"));
+                    return user;
+                }
             }
         }
 
@@ -144,20 +153,32 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(User user) throws Exception {
+        boolean updatePassword = (user.getPassword() != null && !user.getPassword().trim().isEmpty());
 
-        String sql = "UPDATE user SET full_name=?, email=?, phone=?, role=?, password=? WHERE user_id=?";
+        StringBuilder sql = new StringBuilder("UPDATE user SET full_name=?, email=?, phone=?, role=?");
 
-        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+        if (updatePassword) {
+            sql.append(", password=?");
+        }
+        sql.append(" WHERE user_id=?");
 
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql.toString())) {
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPhone());
             ps.setString(4, user.getRole());
-            ps.setString(5, user.getPassword());
-            ps.setInt(6, user.getUserId());
+            if (updatePassword) {
+                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                if (hashedPassword != null && hashedPassword.startsWith("$2a$")) {
+                    hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2b\\$");
+                }
+                    ps.setString(5, hashedPassword);
+                    ps.setInt(6, user.getUserId());
+                } else {
+                    ps.setInt(6, user.getUserId());
+                }
 
-            ps.executeUpdate();
-        }
+            }
     }
 
     @Override
