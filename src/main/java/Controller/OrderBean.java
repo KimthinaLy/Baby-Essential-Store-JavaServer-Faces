@@ -47,6 +47,7 @@ public class OrderBean implements Serializable {
     private List<OrderItem> orderItems;
     private List<Order> allOrders = new ArrayList<>(); //all orders from all user
     private Order selectedOrder = new Order(); //one specific order get by OrderId
+    private Order singleOrder = new Order(); //use when create
 
     @Inject
     private CartBean cartBean;
@@ -61,7 +62,6 @@ public class OrderBean implements Serializable {
                 .getSessionMap()
                 .get("user");
         try {
-
             if (addressBean.getAddress() == null) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -76,23 +76,18 @@ public class OrderBean implements Serializable {
                 return null;
             }
 
-            Order order = new Order();
+            singleOrder.setUserId(user.getUserId());
+            singleOrder.setAddressId(addressBean.getAddress().getAddressId());
+            singleOrder.setTotalAmount(cartBean.getSelectedTotal());
+            singleOrder.setOrderStatus("Pending");
+            singleOrder.setPaymentStatus("Unpaid");
 
-            order.setUserId(user.getUserId());
-
-            order.setAddressId(addressBean.getAddress().getAddressId());
-            order.setTotalAmount(cartBean.getSelectedTotal());
-            order.setOrderStatus("Pending");
-            order.setPaymentMethod("COD");
-            order.setPaymentStatus("Unpaid");
-
-            int orderId = orderDAO.createOrder(order);
+            int orderId = orderDAO.createOrder(singleOrder);
             for (CartItem cartItem : cartBean.getSelectedItems()) {
                 System.out.println("Product ID: " + cartItem.getProduct().getProductId());
                 System.out.println("Inserting item: " + cartItem.getProduct().getName());
 
                 OrderItem item = new OrderItem();
-
                 item.setOrderId(orderId);
                 item.setProductId(cartItem.getProductId());
                 item.setQuantity(cartItem.getQuantity());
@@ -104,19 +99,17 @@ public class OrderBean implements Serializable {
 
             // clear cart
             cartBean.deleteSelected();
-
+            singleOrder = new Order();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Order Success."));
-
+            
             return "/views/customer/order-history?faces-redirect=true";
-
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Order Failed."));
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     public List<Order> getOrders() {
@@ -267,4 +260,14 @@ public class OrderBean implements Serializable {
         }
         return null;
     }
+
+    public Order getSingleOrder() {
+        return singleOrder;
+    }
+
+    public void setSingleOrder(Order singleOrder) {
+        this.singleOrder = singleOrder;
+    }
+    
+    
 }

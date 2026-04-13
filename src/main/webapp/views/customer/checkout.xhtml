@@ -12,18 +12,14 @@
         <div style="padding-top: 10vh; padding-bottom: 10vh" class="px-3 min-h-screen">
             <!-- DELIVERY ADDRESS -->
             <div class="mb-4 p-3 border-round surface-100">
-
                 <h3 class="text-primary">Delivery Address</h3>
-
                 <h:panelGroup rendered="#{not empty addressBean.address}">
                     <p>
                         <b>Name:</b> #{addressBean.address.receiverName}
                     </p>
-
                     <p>
                         <b>Phone:</b> #{addressBean.address.phone}
                     </p>
-
                     <p>
                         <b>Address:</b>
                         #{addressBean.address.street},
@@ -32,12 +28,10 @@
                         #{addressBean.address.postalCode}
                     </p>
                 </h:panelGroup>
-
             </div>
             <h2 class="mb-4 text-primary text-center">Order Summary</h2>
             <h:form>
                 <p:dataTable value="#{cartBean.selectedItems}" var="item">
-
                     <p:column headerText="Product Image" style="width:120px">
                         <h:graphicImage value="#{item.product.getProductImage()}"
                                         style="width:80px;height:80px"/>
@@ -45,11 +39,9 @@
                     <p:column headerText="Product" styleClass="white-space-nowrap overflow-hidden text-overflow-ellipsis">
                         #{item.product.name}
                     </p:column>
-
                     <p:column headerText="Quantity">
                         x #{item.quantity}
                     </p:column>
-
                     <p:column headerText="Price per Unit">
                         $#{item.product.price}
                     </p:column>
@@ -66,25 +58,29 @@
                     </h:outputText>
                 </div>
 
-                <div class="flex justify-content-center flex-wrap surface-100">
+                <p:outputPanel id="paymentSection" styleClass="mt-4 p-3 border-round surface-100">
+                    <h5 class="mb-3 mt-0">Payment Method</h5>
 
-                    <div style="width:200px;">
-
-                        <h2 class="text-primary text-center mb-3">Payment Method</h2>
-
-                        <p:selectOneRadio layout="pageDirection">
+                    <p:selectOneRadio id="paymentMethod"  layout="pageDirection" value="#{orderBean.singleOrder.paymentMethod}" columns="3">
                             <f:selectItem itemLabel="Cash On Delivery" itemValue="COD"/>
                             <f:selectItem itemLabel="QR Payment" itemValue="QR"/>
                             <f:selectItem itemLabel="Credit Card" itemValue="CARD"/>
-                        </p:selectOneRadio>
+                        <p:ajax update="qrContainer" process="@this" />
+                    </p:selectOneRadio>
 
-                    </div>
-
-                </div>
+                    <p:outputPanel id="qrContainer" styleClass="mt-3 text-center">
+                        <h:panelGroup rendered="#{orderBean.singleOrder.paymentMethod eq 'QR'}">
+                            <div class="flex flex-column align-items-center animation-duration-500 fadein">
+                                <p:graphicImage library="images" name="myQR.jpg" 
+                                                style="width: 200px; height: auto; border: 5px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+                                <p:badge value="Scan to Pay" severity="info" styleClass="mt-2" />
+                            </div>
+                        </h:panelGroup>
+                    </p:outputPanel>
+                </p:outputPanel>
 
                 <!-- BUTTONS BELOW TABLE -->
                 <div class="flex justify-content-between mt-4">
-
                     <p:link outcome="/views/customer/cart" styleClass="text-white">
                         <p:button value="Back" icon="pi pi-shopping-cart" />
                     </p:link>
@@ -94,10 +90,8 @@
                         icon="pi pi-check"
                         action="#{orderBean.placeOrder}"
                         styleClass="p-button-success">
-
                     </p:commandButton>
                 </div>
-
             </h:form>
         </div>
     </ui:define>
