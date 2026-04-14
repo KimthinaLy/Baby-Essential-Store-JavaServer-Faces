@@ -22,7 +22,7 @@ import jakarta.inject.Inject;
 @RequestScoped
 public class UserContext {
     @Inject
-     private UtilJwt jwtUtil;
+     private UtilJwt uitlJwt;
 
     public Integer getCurrentUserId() {
 
@@ -38,7 +38,7 @@ public class UserContext {
         if (cookies != null) {
             for (Cookie c : cookies) {
                 if ("customer_auth".equals(c.getName())) {
-                    Claims claims = jwtUtil.validateToken(c.getValue());
+                    Claims claims = uitlJwt.validateToken(c.getValue());
                     if (claims != null) {
                         return (Integer) claims.get("userId");
                     }

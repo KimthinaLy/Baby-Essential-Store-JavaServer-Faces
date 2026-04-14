@@ -26,7 +26,7 @@ import util.UtilJwt;
 public class CustomerJwtFilter implements Filter {
 
     @Inject
-    private UtilJwt JWTUtil;
+    private UtilJwt uitlJwt;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -59,7 +59,7 @@ public class CustomerJwtFilter implements Filter {
             return;
         }
 
-        Claims claims = (token != null) ? JWTUtil.validateToken(token) : null;
+        Claims claims = (token != null) ? uitlJwt.validateToken(token) : null;
 
         if (claims != null) {
             chain.doFilter(request, response);

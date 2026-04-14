@@ -7,15 +7,20 @@
         <title>Register</title>
         <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
         <link rel="icon"
-          type="image/x-icon"
-          href="#{resource['images:logo2.png']}" />
+              type="image/x-icon"
+              href="#{resource['images:logo2.png']}" />
     </h:head>
     <h:body>
         <div class="flex justify-content-center pt-5 pb-8" style="height:100vh">
             <h:form>
+                <div style="margin-bottom: 20px;">
+                        <p:link outcome="/views/customer/product" styleClass="text-primary" style="text-decoration: none; color: inherit;">
+                            <i class="pi pi-chevron-left"   style="font-size: 0.8rem; margin-right: 5px;"></i>
+                            <h:outputText value="Back to Products" style="font-weight: bold"/>
+                        </p:link>
+                    </div>
                 <p:panel header="Register" style="width: 90vw; max-width:600px;">
                     <p:messages/>
-
                     <h4>User Info</h4>
                     <div class="p-fluid flex flex-column row-gap-4">
 
@@ -52,7 +57,7 @@
                         </span>
 
                         <p:separator style="width:100%;" />
-                        
+
                         <h4>Address</h4>
 
                         <p:outputLabel for="@next" value="Receiver Name" />
@@ -62,7 +67,7 @@
                         <p:outputLabel for="@next" value="Receiver Phone" />
                         <p:inputMask id="receiverPhone" value="#{authBean.address.phone}"  autocomplete="off"
                                      mask="(999) 999-9999" validateMask="true" required="true"/>
-                        
+
                         <p:outputLabel for="@next" value="Street" />
                         <p:inputText placeholder="Street" autocomplete="off"
                                      value="#{authBean.address.street}" required="true"/>
@@ -83,10 +88,10 @@
                         <p:commandButton
                             value="Register"
                             action="#{authBean.register}" />
-                        
-                        
-                      <p:separator style="width:100%; " />
-                        
+
+
+                        <p:separator style="width:100%; " />
+
                         <p:link value="Back"
                                 outcome="/views/auth/login"/>
                     </div>

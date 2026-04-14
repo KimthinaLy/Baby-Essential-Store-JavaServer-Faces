@@ -28,7 +28,7 @@ import util.UtilJwt;
 @SessionScoped
 public class AuthBean implements Serializable {
     @Inject
-        private UtilJwt jwtUtil;
+        private UtilJwt uitlJwt;
 
     private User user = new User();
     private Address address = new Address();
@@ -40,7 +40,7 @@ public class AuthBean implements Serializable {
             User loggedUser = userDAO.login(user.getEmail(), user.getPassword());
             if (loggedUser != null) {
                 user = loggedUser;
-                String token = jwtUtil.generateToken(loggedUser);
+                String token = uitlJwt.generateToken(loggedUser);
 
                 HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance()
                         .getExternalContext().getResponse();

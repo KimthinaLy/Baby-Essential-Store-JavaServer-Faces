@@ -8,6 +8,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
@@ -17,7 +20,9 @@ import model.User;
  *
  * @author Admin
  */
-public class UtilJwt {
+@Named
+@ApplicationScoped
+public class UtilJwt implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private final String JWT_SECRET = "JSFSuperSecretBabyStoreKey2026_Secure"; 
