@@ -71,6 +71,24 @@ public class AddressDAOImpl implements AddressDAO {
 
         return null;
     }
+    
+    @Override
+    public void insertAddressInTransaction(Connection con, Address address) throws Exception{
+        String sql = "INSERT INTO address (user_id, receiver_name, phone, street, city, province, postal_code) VALUES(?,?,?,?,?,?,?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, address.getUserId());
+            ps.setString(2, address.getReceiverName());
+            ps.setString(3, address.getPhone());
+            ps.setString(4, address.getStreet());
+            ps.setString(5, address.getCity());
+            ps.setString(6, address.getProvince());
+            ps.setString(7, address.getPostalCode());
+
+            ps.executeUpdate();
+        }
+    }
 
     @Override
     public void insertAddress(Address address) throws Exception {
@@ -105,6 +123,24 @@ public class AddressDAOImpl implements AddressDAO {
         """;
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, address.getReceiverName());
+            ps.setString(2, address.getPhone());
+            ps.setString(3, address.getStreet());
+            ps.setString(4, address.getCity());
+            ps.setString(5, address.getProvince());
+            ps.setString(6, address.getPostalCode());
+            ps.setInt(7, address.getAddressId());
+
+            ps.executeUpdate();
+        }
+    }
+    
+    @Override
+    public  void updateAddressInTransaction(Connection con, Address address) throws Exception{
+        String sql = "UPDATE address SET receiver_name=?, phone=?, street=?, city=?, province=?, postal_code=? WHERE address_id=?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, address.getReceiverName());
             ps.setString(2, address.getPhone());

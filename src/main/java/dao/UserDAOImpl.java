@@ -5,17 +5,22 @@
 package dao;
 
 import model.User;
+import model.Address;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import util.DBUtil;
 import org.mindrot.jbcrypt.BCrypt;
+import dao.AddressDAO;
+import dao.AddressDAOImpl;
 
 /**
  *
  * @author Admin
  */
 public class UserDAOImpl implements UserDAO {
+
+    final AddressDAO addrDAO = new AddressDAOImpl();
 
     @Override
     public int register(User user) throws Exception {
@@ -47,14 +52,62 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public int registerUserInTransaction(Connection con, User user) throws Exception {
+        String sql = "INSERT INTO user(full_name,email,password,phone,role) VALUES(?,?,?,?,?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            if (hashedPassword != null && hashedPassword.startsWith("$2a$")) {
+                hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2b\\$");
+            }
+            ps.setString(3, hashedPassword);
+            ps.setString(4, user.getPhone());
+            ps.setString(5, "CUSTOMER");
+
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+
+            return rs.next() ? rs.getInt(1) : 0;
+        }
+    }
+    
+    @Override
+    public void registerWithAddress(User user, Address address) throws Exception {
+        Connection con = null;
+        try {
+            con = DBUtil.getConnection();
+            con.setAutoCommit(false);
+
+            int userId = registerUserInTransaction(con, user);
+
+            address.setUserId(userId);
+            addrDAO.insertAddressInTransaction(con, address);
+
+            con.commit();
+
+        } catch (Exception e) {
+            if (con != null) {
+                con.rollback();
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                con.setAutoCommit(true);
+                con.close();
+            }
+        }
+    }
+
+    @Override
     public User login(String email, String password) throws Exception {
         String sql = "SELECT * FROM user WHERE email=?";
 
         try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
                 String storedHash = rs.getString("password");
 
@@ -73,7 +126,6 @@ public class UserDAOImpl implements UserDAO {
                 }
             }
         }
-
         return null;
     }
 
@@ -172,14 +224,68 @@ public class UserDAOImpl implements UserDAO {
                 if (hashedPassword != null && hashedPassword.startsWith("$2a$")) {
                     hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2b\\$");
                 }
-                    ps.setString(5, hashedPassword);
-                    ps.setInt(6, user.getUserId());
-                } else {
-                    ps.setInt(6, user.getUserId());
-                }
-
+                ps.setString(5, hashedPassword);
+                ps.setInt(6, user.getUserId());
+            } else {
+                ps.setInt(6, user.getUserId());
             }
+        }
     }
+    
+    @Override
+    public void updateUserInTransaction(Connection con, User user) throws Exception {
+        boolean updatePassword = (user.getPassword() != null && !user.getPassword().trim().isEmpty());
+
+        StringBuilder sql = new StringBuilder("UPDATE user SET full_name=?, email=?, phone=?, role=?");
+
+        if (updatePassword) {
+            sql.append(", password=?");
+        }
+        sql.append(" WHERE user_id=?");
+
+        try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getRole());
+            if (updatePassword) {
+                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                if (hashedPassword != null && hashedPassword.startsWith("$2a$")) {
+                    hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2b\\$");
+                }
+                ps.setString(5, hashedPassword);
+            } 
+            ps.setInt(6, user.getUserId());
+            ps.executeUpdate();
+        }
+    }
+    
+    public void updateWithAddress(User user, Address address) throws Exception {
+    Connection con = null;
+    try {
+        con = DBUtil.getConnection();
+        con.setAutoCommit(false); 
+
+        this.updateUserInTransaction(con, user);
+
+        if (address.getAddressId() == 0) {
+            address.setUserId(user.getUserId());
+            addrDAO.insertAddressInTransaction(con, address); 
+        } else {
+            addrDAO.updateAddressInTransaction(con, address);
+        }
+
+        con.commit(); 
+    } catch (Exception e) {
+        if (con != null) con.rollback();
+        throw e;
+    } finally {
+        if (con != null) {
+            con.setAutoCommit(true);
+            con.close();
+        }
+    }
+}
 
     @Override
     public void deleteUser(int userId) throws Exception {
@@ -191,4 +297,5 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
         }
     }
+
 }

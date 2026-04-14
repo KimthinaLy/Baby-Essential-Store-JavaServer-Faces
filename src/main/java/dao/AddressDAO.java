@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+import java.sql.Connection;
 import model.Address;
 
 /**
@@ -20,4 +21,8 @@ public interface AddressDAO {
     void updateAddress(Address address) throws Exception;
 
     void deleteAddress(int addressId) throws Exception;
+    
+    void insertAddressInTransaction(Connection con, Address address) throws Exception;
+    
+    void updateAddressInTransaction(Connection con, Address address) throws Exception;
 }

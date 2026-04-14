@@ -80,12 +80,9 @@ public class AuthBean implements Serializable {
 
     public String register() {
         try {
-            int userId = userDAO.register(user);
+           userDAO.registerWithAddress(user, address);
             
-            address.setUserId(userId);
-
-            addressDAO.insertAddress(address);
-            
+           FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
              FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Registration Success!"));
             

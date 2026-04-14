@@ -31,9 +31,9 @@ import model.User;
 @SessionScoped
 public class CartBean implements Serializable {
 
-    private CartDAO cartDAO = new CartDAOImpl();
-    private CartItemDAO cartItemDAO = new CartItemDAOImpl();
-    private ProductDAO productDAO = new ProductDAOImpl();
+    final private CartDAO cartDAO = new CartDAOImpl();
+    final private CartItemDAO cartItemDAO = new CartItemDAOImpl();
+    //final private ProductDAO productDAO = new ProductDAOImpl();
 
 //    private List<Product> cartList = new ArrayList<>();
     private List<CartItem> cartItems;

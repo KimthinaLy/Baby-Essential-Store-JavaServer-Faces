@@ -56,14 +56,11 @@ public class UserBean implements Serializable {
     public void save() {
         try {
             if (user.getUserId() == 0) {
-                // CREATE USER
                 
                 if (user.getPassword() == null || user.getPassword().isEmpty()) {
                 throw new Exception("Password is required for new users!");
                }
-                int userId = userDAO.register(user);
-                address.setUserId(userId);
-                addressDAO.insertAddress(address);
+                userDAO.registerWithAddress(user, address);
             } else {
                 // UPDATE USER
                 userDAO.updateUser(user);

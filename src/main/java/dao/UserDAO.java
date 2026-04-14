@@ -4,8 +4,10 @@
  */
 package dao;
 
+import java.sql.Connection;
 import java.util.List;
 import model.User;
+import model.Address;
 
 /**
  *
@@ -19,4 +21,7 @@ public interface UserDAO {
     List<User> getAllUsers() throws Exception;
     void updateUser(User user) throws Exception;
     void deleteUser(int userId) throws Exception;
+    void registerWithAddress(User user, Address address) throws Exception;
+    int registerUserInTransaction(Connection con, User user) throws Exception;
+    void updateUserInTransaction(Connection con, User user) throws Exception;
 }
