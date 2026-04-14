@@ -10,7 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.faces.context.FacesContext;
 import model.User;
-import util.JwtUtil;
+import util.UtilJwt;
 import io.jsonwebtoken.Claims;
 import jakarta.inject.Inject;
 
@@ -22,7 +22,7 @@ import jakarta.inject.Inject;
 @RequestScoped
 public class UserContext {
     @Inject
-     private JwtUtil jwtUtil;
+     private UtilJwt jwtUtil;
 
     public Integer getCurrentUserId() {
 

@@ -16,7 +16,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import util.JwtUtil;
+import util.UtilJwt;
 
 /**
  *
@@ -26,7 +26,7 @@ import util.JwtUtil;
 public class CustomerJwtFilter implements Filter {
 
     @Inject
-    private JwtUtil JWTUtil;
+    private UtilJwt JWTUtil;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

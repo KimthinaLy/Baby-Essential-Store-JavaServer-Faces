@@ -18,7 +18,7 @@ import model.User;
 
 import java.io.Serializable;
 import model.Address;
-import util.JwtUtil;
+import util.UtilJwt;
 
 /**
  *
@@ -28,7 +28,7 @@ import util.JwtUtil;
 @SessionScoped
 public class AuthBean implements Serializable {
     @Inject
-        private JwtUtil jwtUtil;
+        private UtilJwt jwtUtil;
 
     private User user = new User();
     private Address address = new Address();
