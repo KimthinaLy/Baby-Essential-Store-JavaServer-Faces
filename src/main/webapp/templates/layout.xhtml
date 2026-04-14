@@ -68,7 +68,7 @@
                 </p:link>
 
                 <h:form styleClass="flex align-items-center gap-4">
-                    <h:panelGroup rendered="#{not empty sessionScope.user}">
+                    <h:panelGroup rendered="#{not empty userContext.currentUserId}">
                         <p:link outcome="/views/profile/profile">
                             <p:button value="Profile" icon="pi pi-user"/>
                         </p:link>
@@ -79,7 +79,7 @@
                                          styleClass="p-button-text"/>
                     </h:panelGroup>
 
-                    <h:panelGroup rendered="#{empty sessionScope.user}">
+                    <h:panelGroup rendered="#{empty userContext.currentUserId}">
                         <p:link outcome="/views/auth/register">
                             <p:button value="Register" icon="pi pi-user-plus"/>
                         </p:link>

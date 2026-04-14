@@ -26,14 +26,13 @@ public class AuthSecurityFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         
-        String loginURL = req.getContextPath() + "/faces/views/auth/login.xhtml";
+        String requestURI = req.getRequestURI();
+        String contextPath = req.getContextPath();
+        String loginURL = contextPath + "/faces/views/auth/login.xhtml";
         
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
         res.setHeader("Pragma", "no-cache"); // HTTP 1.0
         res.setDateHeader("Expires", 0); // Proxies
-
-        String requestURI = req.getRequestURI();
-        String contextPath = req.getContextPath();
 
         boolean isPublicPage = requestURI.endsWith("index.xhtml")
                 || requestURI.contains("/auth/")

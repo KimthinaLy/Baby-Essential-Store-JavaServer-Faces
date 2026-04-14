@@ -11,13 +11,14 @@ import dao.CartItemDAOImpl;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import model.Cart;
 import model.CartItem;
-import model.User;
+import service.UserContext;
 
 /**
  *
@@ -27,24 +28,24 @@ import model.User;
 @SessionScoped
 public class CartBean implements Serializable {
 
+    @Inject
+    private UserContext userContext;
+
     final private CartDAO cartDAO = new CartDAOImpl();
     final private CartItemDAO cartItemDAO = new CartItemDAOImpl();
-    //final private ProductDAO productDAO = new ProductDAOImpl();
 
-//    private List<Product> cartList = new ArrayList<>();
     private List<CartItem> cartItems;
     private List<CartItem> selectedItems;
 
     public String addToCart(int productId) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        User user = (User) context.getExternalContext().getSessionMap().get("user");
+        Integer userId = userContext.getCurrentUserId();
 
-        if (user == null) {
+        if (userId == null) {
             return "/views/auth/login?faces-redirect=true";
         }
 
         try {
-            cartDAO.addItemToCartTransaction(user.getUserId(), productId);
+            cartDAO.addItemToCartTransaction(userId, productId);
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Added to cart"));
@@ -63,16 +64,14 @@ public class CartBean implements Serializable {
     }*/
     public List<CartItem> getCartItems() {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-
-            User user = (User) context.getExternalContext().getSessionMap().get("user");
-            if (user == null) {
+            Integer userId = userContext.getCurrentUserId();
+            if (userId == null) {
                 throw new IllegalStateException("No user in session");
             }
 
-            Cart cart = cartDAO.getCartByUserId(user.getUserId());
+            Cart cart = cartDAO.getCartByUserId(userId);
             if (cart == null) {
-                return Collections.emptyList(); // or create a new cart
+                return Collections.emptyList();
             }
 
             cartItems = cartItemDAO.getCartItems(cart.getCartId());
@@ -93,10 +92,9 @@ public class CartBean implements Serializable {
     public void deleteSelected() {
 
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            User user = (User) context.getExternalContext().getSessionMap().get("user");
+            Integer userId = userContext.getCurrentUserId();
 
-            Cart cart = cartDAO.getCartByUserId(user.getUserId());
+            Cart cart = cartDAO.getCartByUserId(userId);
 
             this.cartItems = cartItemDAO.deleteSelectedTransaction(selectedItems, cart.getCartId());
 
@@ -112,11 +110,9 @@ public class CartBean implements Serializable {
 
     public void updateItem(int itemId, int qty) {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            User user = (User) context
-                    .getExternalContext().getSessionMap().get("user");
+            Integer userId = userContext.getCurrentUserId();
 
-            Cart cart = cartDAO.getCartByUserId(user.getUserId());
+            Cart cart = cartDAO.getCartByUserId(userId);
 
             cartItems = cartItemDAO.updateAndRefreshItems(itemId, qty, cart.getCartId());
 
@@ -139,13 +135,9 @@ public class CartBean implements Serializable {
 
     public void removeItem(int cartItemId) {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            User user = (User) context
-                    .getExternalContext()
-                    .getSessionMap()
-                    .get("user");
+            Integer userId = userContext.getCurrentUserId();
 
-            Cart cart = cartDAO.getCartByUserId(user.getUserId());
+            Cart cart = cartDAO.getCartByUserId(userId);
             cartItems = cartItemDAO.removeAndRefreshItems(cartItemId, cart.getCartId());
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Item removed from cart"));
@@ -155,22 +147,21 @@ public class CartBean implements Serializable {
                             "Delete Failed", null));
         }
     }
-    
+
     public void refreshCart() {
-    try {
-        User user = (User) FacesContext.getCurrentInstance()
-                .getExternalContext().getSessionMap().get("user");
-        
-        Cart cart = cartDAO.getCartByUserId(user.getUserId());
-        
-       this.cartItems = cartItemDAO.getCartItems(cart.getCartId());
-        
-        this.selectedItems = null; 
-        
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            Integer userId = userContext.getCurrentUserId();
+
+            Cart cart = cartDAO.getCartByUserId(userId);
+
+            this.cartItems = cartItemDAO.getCartItems(cart.getCartId());
+
+            this.selectedItems = null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
     public double getSelectedTotal() {
 

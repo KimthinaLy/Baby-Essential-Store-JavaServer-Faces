@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +18,7 @@ import model.User;
 
 import java.io.Serializable;
 import model.Address;
-import util.jwtUtil;
+import util.JwtUtil;
 
 /**
  *
@@ -26,6 +27,8 @@ import util.jwtUtil;
 @Named
 @SessionScoped
 public class AuthBean implements Serializable {
+    @Inject
+        private JwtUtil jwtUtil;
 
     private User user = new User();
     private Address address = new Address();

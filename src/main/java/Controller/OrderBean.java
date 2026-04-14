@@ -23,11 +23,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import model.Address;
-import model.CartItem;
 import model.Order;
 import model.OrderItem;
 import model.Product;
 import model.User;
+import service.UserContext;
 
 /**
  *
@@ -36,6 +36,9 @@ import model.User;
 @Named
 @SessionScoped
 public class OrderBean implements Serializable {
+
+    @Inject
+    private UserContext userContext;
 
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderItemDAO orderItemDAO = new OrderItemDAOImpl();
@@ -56,9 +59,8 @@ public class OrderBean implements Serializable {
     private AddressBean addressBean;
 
     public String placeOrder() {
-        User user = (User) FacesContext.getCurrentInstance()
-            .getExternalContext().getSessionMap().get("user");
-        
+        Integer userId = userContext.getCurrentUserId();
+
         try {
             if (addressBean.getAddress() == null) {
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -74,7 +76,7 @@ public class OrderBean implements Serializable {
                 return null;
             }
 
-            singleOrder.setUserId(user.getUserId());
+            singleOrder.setUserId(userId);
             singleOrder.setAddressId(addressBean.getAddress().getAddressId());
             singleOrder.setTotalAmount(cartBean.getSelectedTotal());
             singleOrder.setOrderStatus("Pending");
@@ -82,11 +84,11 @@ public class OrderBean implements Serializable {
 
             orderDAO.placeOrderTransaction(singleOrder, cartBean.getSelectedItems());
 
-           cartBean.refreshCart();
+            cartBean.refreshCart();
             singleOrder = new Order();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Order Success."));
-            
+
             return "/views/customer/order-history?faces-redirect=true";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -97,14 +99,10 @@ public class OrderBean implements Serializable {
     }
 
     public List<Order> getOrders() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        User user = (User) context
-                .getExternalContext()
-                .getSessionMap()
-                .get("user");
+        Integer userId = userContext.getCurrentUserId();
 
         try {
-            orders = orderDAO.getOrdersByUser(user.getUserId());
+            orders = orderDAO.getOrdersByUser(userId);
             return orders;
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,10 +185,10 @@ public class OrderBean implements Serializable {
 
     public String manageOrder(int orderId) {
         FacesContext context = FacesContext.getCurrentInstance();
-        User user = (User) context
+        User staff = (User) context
                 .getExternalContext()
                 .getSessionMap()
-                .get("user");
+                .get("staff");
 
         try {
             orderItems = orderItemDAO.getItemsByOrderId(orderId);
@@ -199,7 +197,7 @@ public class OrderBean implements Serializable {
             e.printStackTrace();
         }
 
-        if ("MANAGER".equals(user.getRole())) {
+        if ("MANAGER".equals(staff.getRole())) {
             return "/views/manager/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;
         } else {
             return "/views/employee/order-detail.xhtml?faces-redirect=true&orderId=" + orderId;

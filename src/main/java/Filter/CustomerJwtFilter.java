@@ -5,6 +5,7 @@
 package Filter;
 
 import io.jsonwebtoken.Claims;
+import jakarta.inject.Inject;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,22 +16,27 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import util.jwtUtil;
+import util.JwtUtil;
 
 /**
  *
  * @author Admin
  */
 @WebFilter("/faces/views/customer/*")
-public class CustomerJwtFilter implements Filter{
+public class CustomerJwtFilter implements Filter {
+
+    @Inject
+    private JwtUtil JWTUtil;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        
+        String requestURI = req.getRequestURI();
+        String contextPath = req.getContextPath();
+
         String token = null;
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
@@ -41,12 +47,24 @@ public class CustomerJwtFilter implements Filter{
             }
         }
 
-           Claims claims = (token != null) ? jwtUtil.validateToken(token) : null;
+        boolean isPublicStorePage = requestURI.contains("product.xhtml")
+                || requestURI.contains("index.xhtml")
+                || requestURI.contains("cart.xhtml")
+                || requestURI.contains("order-history.xhtml")
+                || requestURI.equals(contextPath + "/");
+                
+
+        if (isPublicStorePage) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        Claims claims = (token != null) ? JWTUtil.validateToken(token) : null;
 
         if (claims != null) {
             chain.doFilter(request, response);
         } else {
-            res.sendRedirect(req.getContextPath() + "/faces/views/auth/login.xhtml");
+            res.sendRedirect(req.getContextPath() + "/faces/views/customer/login.xhtml");
         }
     }
 }
