@@ -25,46 +25,47 @@ public class AuthSecurityFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession(false);
+        
         String loginURL = req.getContextPath() + "/faces/views/auth/login.xhtml";
         
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
         res.setHeader("Pragma", "no-cache"); // HTTP 1.0
         res.setDateHeader("Expires", 0); // Proxies
 
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
         String requestURI = req.getRequestURI();
         String contextPath = req.getContextPath();
 
         boolean isPublicPage = requestURI.endsWith("index.xhtml")
                 || requestURI.contains("/auth/")
-                || requestURI.contains("product.xhtml")
-                || requestURI.contains("cart.xhtml")
                 || requestURI.equals(contextPath + "/");
 
         boolean isResource = requestURI.contains("jakarta.faces.resource") || requestURI.contains("javax.faces.resource");
+        
+        boolean isCustomerPath = requestURI.contains("/customer/");
 
-        if (isPublicPage || isResource) {
+        if (isPublicPage || isResource || isCustomerPath) {
             chain.doFilter(request, response);
             return;
         }
-
-        if (user == null) {
+        
+        HttpSession session = req.getSession(false);
+        User staff = (session != null) ? (User) session.getAttribute("staff") : null;
+        if (staff == null) {
             res.sendRedirect(loginURL);
             return;
         }
 
-        if (requestURI.contains("/admin/") && !"ADMIN".equals(user.getRole())) {
+        if (requestURI.contains("/admin/") && !"ADMIN".equals(staff.getRole())) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        if (requestURI.contains("/manager/") && !"MANAGER".equals(user.getRole()) && !"ADMIN".equals(user.getRole())) {
+        if (requestURI.contains("/manager/") && !"MANAGER".equals(staff.getRole()) && !"ADMIN".equals(staff.getRole())) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        if (requestURI.contains("/employee/") && !"EMPLOYEE".equals(user.getRole()) && !"MANAGER".equals(user.getRole()) && !"ADMIN".equals(user.getRole())) {
+        if (requestURI.contains("/employee/") && !"EMPLOYEE".equals(staff.getRole()) && !"MANAGER".equals(staff.getRole()) && !"ADMIN".equals(staff.getRole())) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
