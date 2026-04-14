@@ -19,116 +19,155 @@
             </h:form>
         </div>
     </ui:define>
-    
+
     <ui:define name="content">
+        <h1 class="page-title" style="font-size: 2rem; color: #333; margin: 20px 0;">
+            #{not empty productBean.searchKeyword ? 'Search Results for: "'.concat(productBean.searchKeyword).concat('"') : 'All Products'}
+        </h1>
         <div style="min-height: 100vh">
-        <div class=" overflow-y-auto fixed" style="height: 100vh; width: clamp(220px, 25vw, 320px); padding-top: 10vh; padding-bottom: 5vh">
-            <h:form>
-                <p:panelMenu>
+            <div class=" overflow-y-auto fixed" style="height: 100vh; width: clamp(220px, 25vw, 320px); padding-top: 10vh; padding-bottom: 5vh">
+                <h:form>
+                    <p:panelMenu>
 
-                    <!-- CATEGORY -->
-                    <p:submenu label="Categories" expanded="true">
+                        <!-- CATEGORY -->
+                        <p:submenu label="Categories" expanded="true">
 
-                        <p:menuitem value="Clothing"
-                                    action="#{productBean.filterByCategory(1)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Clothing"
+                                        action="#{productBean.filterByCategory(1)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Diapers &amp; Care"
-                                    action="#{productBean.filterByCategory(2)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Diapers &amp; Care"
+                                        action="#{productBean.filterByCategory(2)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Bath Essentials"
-                                    action="#{productBean.filterByCategory(3)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Bath Essentials"
+                                        action="#{productBean.filterByCategory(3)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Toys"
-                                    action="#{productBean.filterByCategory(4)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Toys"
+                                        action="#{productBean.filterByCategory(4)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Activity &amp; Entertainment"
-                                    action="#{productBean.filterByCategory(5)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Activity &amp; Entertainment"
+                                        action="#{productBean.filterByCategory(5)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Car Seats &amp; Accessories"
-                                    action="#{productBean.filterByCategory(6)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Car Seats &amp; Accessories"
+                                        action="#{productBean.filterByCategory(6)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Apparel &amp; Accessories"
-                                    action="#{productBean.filterByCategory(7)}"
-                                    update=":productGrid"/>
-                        <p:menuitem value="Gifts"
-                                    action="#{productBean.filterByCategory(8)}"
-                                    update=":productGrid"/>
-                    </p:submenu>
+                            <p:menuitem value="Apparel &amp; Accessories"
+                                        action="#{productBean.filterByCategory(7)}"
+                                        update=":productGrid"/>
+                            <p:menuitem value="Gifts"
+                                        action="#{productBean.filterByCategory(8)}"
+                                        update=":productGrid"/>
+                        </p:submenu>
 
-                    <!-- OCCASIONS -->
-                    <p:submenu label="Occasions" expanded="true">
+                        <!-- OCCASIONS -->
+                        <p:submenu label="Occasions" expanded="true">
 
-                        <p:menuitem value="Newborn"
-                                    action="#{productBean.filterByOccasion(1)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Newborn"
+                                        action="#{productBean.filterByOccasion(1)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Baby Shower"
-                                    action="#{productBean.filterByOccasion(2)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Baby Shower"
+                                        action="#{productBean.filterByOccasion(2)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Birthday"
-                                    action="#{productBean.filterByOccasion(3)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Birthday"
+                                        action="#{productBean.filterByOccasion(3)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Christmas"
-                                    action="#{productBean.filterByOccasion(4)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Christmas"
+                                        action="#{productBean.filterByOccasion(4)}"
+                                        update=":productGrid"/>
 
-                        <p:menuitem value="Halloween"
-                                    action="#{productBean.filterByOccasion(5)}"
-                                    update=":productGrid"/>
+                            <p:menuitem value="Halloween"
+                                        action="#{productBean.filterByOccasion(5)}"
+                                        update=":productGrid"/>
 
-                    </p:submenu>
-                </p:panelMenu>
-            </h:form>
-        </div>
+                        </p:submenu>
+                    </p:panelMenu>
+                </h:form>
+            </div>
 
-        <!-- PRODUCT GRID -->
-        <div style="padding-left: clamp(220px, 25vw, 320px); padding-top: 10vh">
-            <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);">
-                <div class="grid gap-6 justify-content-center">
-                    <ui:repeat value="#{productBean.products}" var="p">
-                        <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 
 
-                            <!-- CLICKABLE PRODUCT IMAGE -->
+            <!-- PRODUCT GRID -->
+
+
+            <div style="padding-left: clamp(220px, 25vw, 320px); padding-top: 10vh">
+                <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);">
+                    <div class="grid gap-6 justify-content-center">
+                        <ui:repeat value="#{productBean.products}" var="p">
+                            <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 
+
+                                <!-- CLICKABLE PRODUCT IMAGE -->
                                 <f:param name="id" value="#{p.productId}" />
                                 <h:graphicImage value="#{p.getProductImage()}" 
+                                                alt="Photo of #{p.name}"
                                                 style="max-width: 100%;
                                                 aspect-ratio: 1 / 1;
                                                 height: auto;
                                                 object-fit: cover;"
                                                 styleClass="border-round-md"/>
 
-                            <!-- ADD TO CART -->
-                            <p:commandButton value="Add To Cart"
-                                             icon="pi pi-shopping-cart"
-                                             action="#{cartBean.addToCart(p.productId)}"
-                                             process="@this"
-                                             update=":globalForm:messages"
-                                             styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>
-                            <!-- PRODUCT NAME -->
-                            <div Class="no-underline text-lg text-color font-bold">
-                                <f:param name="id" value="#{p.productId}" />
-                                <div class="my-2 white-space-nowrap overflow-hidden text-overflow-ellipsis">#{p.name}</div>
+                                <!-- ADD TO CART -->
+                                <p:commandButton value="Add To Cart"
+                                                 icon="pi pi-shopping-cart"
+                                                 action="#{cartBean.addToCart(p.productId)}"
+                                                 process="@this"
+                                                 update=":globalForm:messages"
+                                                 styleClass="text-sm my-1 white-space-nowrap overflow-hidden text-overflow-ellipsis"/>
+                                <!-- PRODUCT NAME -->
+                                <div Class="no-underline text-lg text-color font-bold">
+                                    <f:param name="id" value="#{p.productId}" />
+                                    <div class="my-2 white-space-nowrap overflow-hidden text-overflow-ellipsis">#{p.name}</div>
+                                </div>
+                                <!-- PRODUCT PRICE -->
+                                <h:outputText value="$#{p.price}"  styleClass="my-2 text-color-secondary font-bold"/>
+                                <div class="product-actions" style="margin-top: 10px;">
+                                    <button type="button" 
+                                            onclick="saveFavorite('#{p.name}')" 
+                                            style="cursor:pointer; background:#fff; border:1px solid #007bff; color:#007bff; border-radius:4px; padding:5px 12px; transition: 0.3s;">
+                                        ⭐ Favorite
+                                    </button>
+                                </div>
+                                <br/><br/>
                             </div>
-                            <!-- PRODUCT PRICE -->
-                            <h:outputText value="$#{p.price}"  styleClass="my-2 text-color-secondary font-bold"/>
+                        </ui:repeat>
 
-                            <br/><br/>
 
-                        </div>
-
-                    </ui:repeat>
+                    </div>
+                </h:form>
+                <div id="fav-status" style="margin: 10px; padding: 15px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; display: none;">
+                    <span id="fav-text"></span>
                 </div>
-            </h:form>
+            </div>
         </div>
-    </div>
+
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            function saveFavorite(name) {
+                localStorage.setItem("user_fav", name);
+                renderFav();
+            }
+
+            function renderFav() {
+                const saved = localStorage.getItem("user_fav");
+                const banner = document.getElementById("fav-status");
+                const text = document.getElementById("fav-text");
+
+                // The parser will now ignore the && symbols below
+                if (saved && banner && text) {
+                    text.innerText = "⭐ Your current favorite: " + saved;
+                    banner.style.display = "block";
+                }
+            }
+
+            window.onload = renderFav;
+            /* ]]> */
+        </script>
     </ui:define>
 
 </ui:composition>
