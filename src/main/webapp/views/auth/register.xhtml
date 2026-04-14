@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+      xmlns:p="primefaces"
+      xmlns:f= "http://java.sun.com/jsf/core">
     <h:head>
         <title>Register</title>
         <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
@@ -13,26 +14,33 @@
     <h:body>
         <div class="flex justify-content-center pt-5 pb-8" style="height:100vh">
             <h:form>
+                <p:messages id="msgs" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
                 <div style="margin-bottom: 20px;">
-                        <p:link outcome="/views/customer/product" styleClass="text-primary" style="text-decoration: none; color: inherit;">
-                            <i class="pi pi-chevron-left"   style="font-size: 0.8rem; margin-right: 5px;"></i>
-                            <h:outputText value="Back to Products" style="font-weight: bold"/>
-                        </p:link>
-                    </div>
+                    <p:link outcome="/views/customer/product" styleClass="text-primary" style="text-decoration: none; color: inherit;">
+                        <i class="pi pi-chevron-left"   style="font-size: 0.8rem; margin-right: 5px;"></i>
+                        <h:outputText value="Back to Products" style="font-weight: bold"/>
+                    </p:link>
+                </div>
                 <p:panel header="Register" style="width: 90vw; max-width:600px;">
-                    <p:messages/>
                     <h4>User Info</h4>
                     <div class="p-fluid flex flex-column row-gap-4">
 
                         <span class="ui-float-label">
                             <p:inputText id="fullName" value="#{authBean.user.fullName}" required="true" autocomplete="off"
-                                         requiredMessage="Name is required" styleClass="w-full"/>
+                                         requiredMessage="Name is required" styleClass="w-full">
+                                <f:validateRegex pattern="^[a-zA-Z\s]+$" />
+                                <f:validateLength minimum="3" maximum="50" />
+                            </p:inputText>
                             <p:outputLabel for="@previous" value="Full Name"/>
                         </span>
 
                         <span class="ui-float-label">
                             <p:inputText id="email" value="#{authBean.user.email}" required="true" autocomplete="off"
-                                         requiredMessage="Email is required" styleClass="w-full"/>
+                                         requiredMessage="Email is required" styleClass="w-full">
+                                <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" />
+                            </p:inputText>
                             <p:outputLabel for="@previous" value="Email"/>
                         </span>
 
@@ -40,19 +48,21 @@
 
                         <span class="ui-float-label">
                             <p:password id="pwd1" value="#{authBean.user.password}" required="true" autocomplete="off"
-                                        requiredMessage="Password number is required" styleClass="w-full"/>
+                                        requiredMessage="Password is required" styleClass="w-full"
+                                        match="pwd2" feedback="true"
+                                        validatorMessage="Passwords do not match!" />
                             <p:outputLabel for="@previous" value="Password"/>
                         </span>
 
                         <span class="ui-float-label">
                             <p:password id="pwd2" value="#{authBean.user.password}" required="true" autocomplete="off"
-                                        requiredMessage="Password number is required" styleClass="w-full"/>
+                                        requiredMessage="Please confirm your password" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Confirm Password"/>
                         </span>
 
                         <span class="ui-float-label">
                             <p:inputMask id="phone" value="#{authBean.user.phone}" required="true" autocomplete="off"
-                                         requiredMessage="Phone number is required" mask="(999) 999-9999" validateMask="true" styleClass="w-full"/>
+                                         mask="(999) 999-9999" validateMask="true" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Phone Number"/>
                         </span>
 
@@ -61,8 +71,10 @@
                         <h4>Address</h4>
 
                         <p:outputLabel for="@next" value="Receiver Name" />
-                        <p:inputText placeholder="Receiver Name" autocomplete="off"
-                                     value="#{authBean.address.receiverName}" required="true"/>
+                        <p:inputText placeholder="Receiver Name" autocomplete="off" value="#{authBean.address.receiverName}" required="true">
+                            <f:validateRegex pattern="^[a-zA-Z\s]+$" />
+                            <f:validateLength minimum="3" maximum="50" />
+                        </p:inputText>
 
                         <p:outputLabel for="@next" value="Receiver Phone" />
                         <p:inputMask id="receiverPhone" value="#{authBean.address.phone}"  autocomplete="off"
@@ -87,8 +99,8 @@
 
                         <p:commandButton
                             value="Register"
+                            update="@form"
                             action="#{authBean.register}" />
-
 
                         <p:separator style="width:100%; " />
 

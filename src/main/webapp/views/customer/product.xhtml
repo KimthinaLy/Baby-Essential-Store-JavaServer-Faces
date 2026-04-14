@@ -7,6 +7,12 @@
     xmlns:f="jakarta.faces.core"
     xmlns:p="http://primefaces.org/ui">
 
+  <ui:param name="pageTitle" 
+              value="#{empty productBean.searchKeyword ? 'Shop All Products' : ': Search results for: ' += productBean.searchKeyword}" />
+    
+    <ui:param name="pageDesc" 
+              value="Browse our baby essentials. #{not empty productBean.searchKeyword ? 'Currently showing results for ' += productBean.searchKeyword : 'Best deals on baby gear.'}" />
+
     <ui:define name="headerSearch">
         <div class="flex align-items-center w-4">
             <h:form class="flex align-items-center w-full">
@@ -21,11 +27,10 @@
     </ui:define>
 
     <ui:define name="content">
-        <h1 class="page-title" style="font-size: 2rem; color: #333; margin: 20px 0;">
-            #{not empty productBean.searchKeyword ? 'Search Results for: "'.concat(productBean.searchKeyword).concat('"') : 'All Products'}
-        </h1>
+
         <div style="min-height: 100vh">
             <div class=" overflow-y-auto fixed" style="height: 100vh; width: clamp(220px, 25vw, 320px); padding-top: 10vh; padding-bottom: 5vh">
+
                 <h:form>
                     <p:panelMenu>
 
@@ -97,7 +102,16 @@
 
 
             <div style="padding-left: clamp(220px, 25vw, 320px); padding-top: 10vh">
+
                 <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);">
+
+                    <h1 class="page-title flex  justify-content-center text-primary" style="font-size: 2rem; color: #333; margin: 20px 0;">
+                        <h:outputText value="All Products" rendered="#{empty productBean.searchKeyword}" />
+                        <h:panelGroup rendered="#{not empty productBean.searchKeyword}">
+                            Search Results for: "#{productBean.searchKeyword}"
+                        </h:panelGroup>
+                    </h1>
+
                     <div class="grid gap-6 justify-content-center">
                         <ui:repeat value="#{productBean.products}" var="p">
                             <div class="col-6 md:col-4 lg:col-3 border-2 border-round-md border-200 "> 

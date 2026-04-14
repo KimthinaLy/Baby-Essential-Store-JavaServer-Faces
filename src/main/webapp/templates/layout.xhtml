@@ -6,7 +6,16 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>Baby Essential Store</title>
+        <title>
+            #{not empty pageTitle ? pageTitle : 'Baby Essential Store'}
+        </title>
+
+        <h:panelGroup rendered="#{not empty pageDesc}">
+            <meta name="description" content="#{pageDesc}" />
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty pageDesc}">
+            <meta name="description" content="Quality baby products for your little ones." />
+        </h:panelGroup>
 
         <h:outputStylesheet library="webjars"
                             name="primeflex/3.3.1/primeflex.min.css" />
