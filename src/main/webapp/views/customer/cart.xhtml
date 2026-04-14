@@ -8,13 +8,13 @@
     xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h:form id="productGrid" styleClass="p-3" style="padding-left: clamp(220px, 25vw, 320px);"></h:form>
+        
         <div class="grid justify-content-center min-h-screen" style="padding-top: 10vh">
             <div class="col-12 lg:col-10 p-0">
 
                 <h2 class="mb-4 text-primary">Shopping Cart</h2>
                 <h:form id="cartForm">
-
+                    <p:growl id="messages" showDetail="true" />
                     <p:dataTable id="cartItemsTable"
                                  value="#{cartBean.cartItems}"
                                  var="item"
@@ -82,9 +82,7 @@
                                                  action="#{cartBean.removeItem(item.cartItemId)}"
                                                  update="cartForm"
                                                  styleClass="p-button-danger p-button-sm"/>
-
                             </div>
-
                         </p:column>
 
                     </p:dataTable>
@@ -108,6 +106,7 @@
 
                         <p:commandButton value="Checkout Selected"
                                          icon="pi pi-shopping-cart"
+                                         update="cartForm messages"
                                          action="#{cartBean.checkoutSelected}"
                                          styleClass="p-button-success"/>
 

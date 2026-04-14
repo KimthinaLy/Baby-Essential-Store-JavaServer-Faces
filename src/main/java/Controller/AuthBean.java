@@ -29,7 +29,6 @@ public class AuthBean implements Serializable {
     private Address address = new Address();
 
     final private UserDAO userDAO = new UserDAOImpl();
-    final private AddressDAO addressDAO = new AddressDAOImpl();
 
     public String login() {
         try {
