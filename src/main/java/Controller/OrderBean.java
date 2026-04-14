@@ -56,11 +56,9 @@ public class OrderBean implements Serializable {
     private AddressBean addressBean;
 
     public String placeOrder() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        User user = (User) context
-                .getExternalContext()
-                .getSessionMap()
-                .get("user");
+        User user = (User) FacesContext.getCurrentInstance()
+            .getExternalContext().getSessionMap().get("user");
+        
         try {
             if (addressBean.getAddress() == null) {
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -82,23 +80,9 @@ public class OrderBean implements Serializable {
             singleOrder.setOrderStatus("Pending");
             singleOrder.setPaymentStatus("Unpaid");
 
-            int orderId = orderDAO.createOrder(singleOrder);
-            for (CartItem cartItem : cartBean.getSelectedItems()) {
-                System.out.println("Product ID: " + cartItem.getProduct().getProductId());
-                System.out.println("Inserting item: " + cartItem.getProduct().getName());
+            orderDAO.placeOrderTransaction(singleOrder, cartBean.getSelectedItems());
 
-                OrderItem item = new OrderItem();
-                item.setOrderId(orderId);
-                item.setProductId(cartItem.getProductId());
-                item.setQuantity(cartItem.getQuantity());
-                item.setProductName(cartItem.getProduct().getName());
-                item.setPrice(cartItem.getProduct().getPrice());
-
-                orderItemDAO.insertOrderItem(item);
-            }
-
-            // clear cart
-            cartBean.deleteSelected();
+           cartBean.refreshCart();
             singleOrder = new Order();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Order Success."));
@@ -144,7 +128,7 @@ public class OrderBean implements Serializable {
     public void deleteOrder(int orderId) {
         try {
 
-            orderDAO.deleteOrder(orderId);
+            orderDAO.deleteOrderTransaction(orderId);
 
             allOrders = orderDAO.getAllOrders();
             orders.removeIf(o -> o.getOrderId() == orderId);
@@ -164,8 +148,6 @@ public class OrderBean implements Serializable {
 
         try {
             Product p = productDAO.getProductById(pid);
-
-            System.out.println(p.getProductImage());
             return p.getProductImage();
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,6 +250,4 @@ public class OrderBean implements Serializable {
     public void setSingleOrder(Order singleOrder) {
         this.singleOrder = singleOrder;
     }
-    
-    
 }

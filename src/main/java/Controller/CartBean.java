@@ -52,7 +52,6 @@ public class CartBean implements Serializable {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Could not add item to cart."));
-
         }
 
         return null;
@@ -98,7 +97,6 @@ public class CartBean implements Serializable {
             User user = (User) context.getExternalContext().getSessionMap().get("user");
 
             Cart cart = cartDAO.getCartByUserId(user.getUserId());
-            this.cartItems = cartItemDAO.deleteSelectedTransaction(selectedItems, cart.getCartId());
 
             this.cartItems = cartItemDAO.deleteSelectedTransaction(selectedItems, cart.getCartId());
 
@@ -157,6 +155,22 @@ public class CartBean implements Serializable {
                             "Delete Failed", null));
         }
     }
+    
+    public void refreshCart() {
+    try {
+        User user = (User) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap().get("user");
+        
+        Cart cart = cartDAO.getCartByUserId(user.getUserId());
+        
+       this.cartItems = cartItemDAO.getCartItems(cart.getCartId());
+        
+        this.selectedItems = null; 
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     public double getSelectedTotal() {
 

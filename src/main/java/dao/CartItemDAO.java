@@ -26,7 +26,7 @@ public interface CartItemDAO {
 
     void clearCart(int cartId) throws Exception;
 
-    CartItem getItem(int cartId, int productId) throws Exception;
+    //CartItem getItem(int cartId, int productId) throws Exception;
     
     CartItem getItemForTransaction(Connection con, int cartId, int productId) throws Exception;
     

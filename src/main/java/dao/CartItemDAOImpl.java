@@ -203,6 +203,7 @@ public class CartItemDAOImpl implements CartItemDAO {
     }
 }
     
+    @Override
     public List<CartItem> deleteSelectedTransaction(List<CartItem> itemsToDelete, int cartId) throws Exception {
     Connection con = null;
     try {
@@ -244,33 +245,6 @@ public class CartItemDAOImpl implements CartItemDAO {
             ps.setInt(1, cartId);
             ps.executeUpdate();
         }
-    }
-
-    @Override
-    public CartItem getItem(int cartId, int productId) throws Exception {
-
-        CartItem item = null;
-
-        String sql = "SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?";
-
-        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, cartId);
-            ps.setInt(2, productId);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                item = new CartItem();
-
-                item.setCartItemId(rs.getInt("cart_item_id"));
-                item.setCartId(rs.getInt("cart_id"));
-                item.setProductId(rs.getInt("product_id"));
-                item.setQuantity(rs.getInt("quantity"));
-            }
-        }
-
-        return item;
     }
     
     @Override

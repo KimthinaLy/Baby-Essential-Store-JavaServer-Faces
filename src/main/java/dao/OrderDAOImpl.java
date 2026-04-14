@@ -7,6 +7,7 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.CartItem;
 import model.Order;
 import util.DBUtil;
 
@@ -17,7 +18,53 @@ import util.DBUtil;
 public class OrderDAOImpl implements OrderDAO {
 
     @Override
-    public int createOrder(Order order) throws Exception {
+    public void placeOrderTransaction(Order order, List<CartItem> cartItems) throws Exception {
+        Connection con = null;
+        try {
+            con = DBUtil.getConnection();
+            con.setAutoCommit(false);
+
+            int orderId = createOrder(con, order);
+
+            // 2. Insert Order Items (Batch processing for efficiency)
+            String itemSql = "INSERT INTO order_items (order_id, product_id, quantity, product_name, price) VALUES (?,?,?,?,?)";
+            try (PreparedStatement ps = con.prepareStatement(itemSql)) {
+                for (CartItem cartItem : cartItems) {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, cartItem.getProductId());
+                    ps.setInt(3, cartItem.getQuantity());
+                    ps.setString(4, cartItem.getProduct().getName());
+                    ps.setDouble(5, cartItem.getProduct().getPrice());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+
+            String clearCartSql = "DELETE FROM cart_items WHERE cart_item_id = ?";
+            try (PreparedStatement ps = con.prepareStatement(clearCartSql)) {
+                for (CartItem cartItem : cartItems) {
+                    ps.setInt(1, cartItem.getCartItemId());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+
+            con.commit();
+        } catch (Exception e) {
+            if (con != null) {
+                con.rollback();
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                con.setAutoCommit(true);
+                con.close();
+            }
+        }
+    }
+
+    @Override
+    public int createOrder(Connection con, Order order) throws Exception {
 
         String sql = """
         INSERT INTO orders
@@ -25,7 +72,7 @@ public class OrderDAOImpl implements OrderDAO {
         VALUES (?, ?, ?, ?, ?, ?)
         """;
 
-        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, order.getUserId());
             ps.setInt(2, order.getAddressId());
@@ -138,28 +185,41 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public void deleteOrder(int orderId) throws Exception {
+    public void deleteOrderTransaction(int orderId) throws Exception {
+        Connection con = null;
+        try {
+            con = DBUtil.getConnection();
+            con.setAutoCommit(false);
 
-        String sql = """
-        DELETE FROM orders
-        WHERE order_id = ?
-        AND order_status = 'Completed'
-    """;
+            String deleteItemsSql = "DELETE FROM order_items WHERE order_id = ?";
+            try (PreparedStatement ps = con.prepareStatement(deleteItemsSql)) {
+                ps.setInt(1, orderId);
+                ps.executeUpdate();
+            }
 
-        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            String deleteOrderSql = "DELETE FROM orders WHERE order_id = ? AND order_status = 'Completed'";
+            try (PreparedStatement ps = con.prepareStatement(deleteOrderSql)) {
+                ps.setInt(1, orderId);
+                ps.executeUpdate();
+            }
 
-            ps.setInt(1, orderId);
-
-            int rows = ps.executeUpdate();
-
-            if (rows == 0) {
-                throw new Exception("Order cannot be deleted unless it is completed.");
+            con.commit(); 
+        } catch (Exception e) {
+            if (con != null) {
+                con.rollback();
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                con.setAutoCommit(true);
+                con.close();
             }
         }
     }
-    
-  public  List<Order> getAllOrders() throws Exception{
-  List<Order> orders = new ArrayList<>();
+
+    @Override
+    public List<Order> getAllOrders() throws Exception {
+        List<Order> orders = new ArrayList<>();
 
         String sql = "SELECT * FROM orders ORDER BY order_date DESC";
 
@@ -183,5 +243,5 @@ public class OrderDAOImpl implements OrderDAO {
         }
 
         return orders;
-  }
+    }
 }
