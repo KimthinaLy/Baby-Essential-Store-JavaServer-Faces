@@ -18,12 +18,12 @@
                 <p:panel header="Login" style="width: 100vw; max-width:500px;">
                     <div class="p-fluid">
                         <h5><p:outputLabel for="@next" value="Enter Email"/></h5>
-                            <p:inputText id="email" value="#{authBean.user.email}" required="true"
+                            <p:inputText id="email" value="#{authBean.user.email}" autocomplete="off" required="true"
                                          requiredMessage="Email is required" styleClass="w-full"/>
 
                         <h5><p:outputLabel for="@next" value="Enter Password"/></h5>
-                        <p:password id="password" value="#{authBean.user.password}"  redisplay="true" placeholder="Password"
-                                    required="true" requiredMessage="Password is required" styleClass="w-full" />
+                        <p:password id="password" value="#{authBean.user.password}"  redisplay="true" placeholder="Password" 
+                                    required="true" requiredMessage="Password is required" autocomplete="off" styleClass="w-full" />
                         <br/>
                         <p:link value="Forget Password"
                                 outcome="/views/auth/login" styleClass="underline"/><br/><br/>

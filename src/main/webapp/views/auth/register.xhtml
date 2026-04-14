@@ -20,13 +20,13 @@
                     <div class="p-fluid flex flex-column row-gap-4">
 
                         <span class="ui-float-label">
-                            <p:inputText id="fullName" value="#{authBean.user.fullName}" required="true"
+                            <p:inputText id="fullName" value="#{authBean.user.fullName}" required="true" autocomplete="off"
                                          requiredMessage="Name is required" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Full Name"/>
                         </span>
 
                         <span class="ui-float-label">
-                            <p:inputText id="email" value="#{authBean.user.email}" required="true"
+                            <p:inputText id="email" value="#{authBean.user.email}" required="true" autocomplete="off"
                                          requiredMessage="Email is required" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Email"/>
                         </span>
@@ -34,19 +34,19 @@
 
 
                         <span class="ui-float-label">
-                            <p:password id="pwd1" value="#{authBean.user.password}" required="true"
+                            <p:password id="pwd1" value="#{authBean.user.password}" required="true" autocomplete="off"
                                         requiredMessage="Password number is required" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Password"/>
                         </span>
 
                         <span class="ui-float-label">
-                            <p:password id="pwd2" value="#{authBean.user.password}" required="true"
+                            <p:password id="pwd2" value="#{authBean.user.password}" required="true" autocomplete="off"
                                         requiredMessage="Password number is required" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Confirm Password"/>
                         </span>
 
                         <span class="ui-float-label">
-                            <p:inputMask id="phone" value="#{authBean.user.phone}" required="true"
+                            <p:inputMask id="phone" value="#{authBean.user.phone}" required="true" autocomplete="off"
                                          requiredMessage="Phone number is required" mask="(999) 999-9999" validateMask="true" styleClass="w-full"/>
                             <p:outputLabel for="@previous" value="Phone Number"/>
                         </span>
@@ -56,26 +56,27 @@
                         <h4>Address</h4>
 
                         <p:outputLabel for="@next" value="Receiver Name" />
-                        <p:inputText placeholder="Receiver Name"
+                        <p:inputText placeholder="Receiver Name" autocomplete="off"
                                      value="#{authBean.address.receiverName}" required="true"/>
 
                         <p:outputLabel for="@next" value="Receiver Phone" />
-                        <p:inputMask id="receiverPhone" value="#{authBean.address.phone}" mask="(999) 999-9999" validateMask="true" required="true"/>
+                        <p:inputMask id="receiverPhone" value="#{authBean.address.phone}"  autocomplete="off"
+                                     mask="(999) 999-9999" validateMask="true" required="true"/>
                         
                         <p:outputLabel for="@next" value="Street" />
-                        <p:inputText placeholder="Street"
+                        <p:inputText placeholder="Street" autocomplete="off"
                                      value="#{authBean.address.street}" required="true"/>
 
                         <p:outputLabel for="@next" value="City" />
-                        <p:inputText placeholder="City"
+                        <p:inputText placeholder="City" autocomplete="off"
                                      value="#{authBean.address.city}" required="true"/>
 
                         <p:outputLabel for="@next" value="Province" />
-                        <p:inputText placeholder="Province"
+                        <p:inputText placeholder="Province" autocomplete="off"
                                      value="#{authBean.address.province}" required="true"/>
 
                         <p:outputLabel for="@next" value="Postal Code" />
-                        <p:inputText placeholder="Postal Code"
+                        <p:inputText placeholder="Postal Code" autocomplete="off"
                                      value="#{authBean.address.postalCode}" required="true"/>
 
 

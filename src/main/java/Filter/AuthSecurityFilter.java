@@ -26,7 +26,11 @@ public class AuthSecurityFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-        String loginURL = req.getContextPath() + "/views/auth/login.xhtml";
+        String loginURL = req.getContextPath() + "/faces/views/auth/login.xhtml";
+        
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+        res.setHeader("Pragma", "no-cache"); // HTTP 1.0
+        res.setDateHeader("Expires", 0); // Proxies
 
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         String requestURI = req.getRequestURI();
@@ -64,7 +68,6 @@ public class AuthSecurityFilter implements Filter {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-
         chain.doFilter(request, response);
     }
 }
