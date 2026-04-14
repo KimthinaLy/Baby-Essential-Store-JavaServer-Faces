@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.sql.Connection;
 import model.Cart;
 
 /**
@@ -14,7 +15,11 @@ public interface CartDAO {
 
     Cart getCartByUserId(int userId) throws Exception;
 
-    int createCart(int userId) throws Exception;
+    Cart getCartByUserIdForTransaction(Connection con, int userId) throws Exception;
+    
+    int createCart(Connection con, int userId) throws Exception;
 
     void deleteCart(int cartId) throws Exception;
+    
+    void addItemToCartTransaction(int userId, int productId) throws Exception;
 }
