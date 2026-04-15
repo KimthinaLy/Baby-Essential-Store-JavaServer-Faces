@@ -36,6 +36,7 @@ import service.UserContext;
 @Named
 @SessionScoped
 public class OrderBean implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Inject
     private UserContext userContext;

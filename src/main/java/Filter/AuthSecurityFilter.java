@@ -28,29 +28,34 @@ public class AuthSecurityFilter implements Filter {
         
         String requestURI = req.getRequestURI();
         String contextPath = req.getContextPath();
-        String loginURL = contextPath + "/faces/views/auth/login.xhtml";
+        
         
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
         res.setHeader("Pragma", "no-cache"); // HTTP 1.0
         res.setDateHeader("Expires", 0); // Proxies
 
-        boolean isPublicPage = requestURI.endsWith("index.xhtml")
+        boolean isLoginPage = requestURI.contains("/login.xhtml");
+        boolean isResource = requestURI.contains("jakarta.faces.resource")
+                                     || requestURI.contains("javax.faces.resource")
+                                     || requestURI.contains("/resources/");
+        
+        boolean isPublicPage = isLoginPage 
+                || requestURI.endsWith("index.xhtml")
                 || requestURI.contains("/auth/")
-                || requestURI.equals(contextPath + "/");
-
-        boolean isResource = requestURI.contains("jakarta.faces.resource") || requestURI.contains("javax.faces.resource");
+                || requestURI.equals(contextPath + "/")
+                || requestURI.equals(contextPath + "/faces/");
         
         boolean isCustomerPath = requestURI.contains("/customer/");
 
-        if (isPublicPage || isResource || isCustomerPath) {
+       if (isPublicPage || isResource || isCustomerPath) {
             chain.doFilter(request, response);
             return;
-        }
+        } 
         
         HttpSession session = req.getSession(false);
         User staff = (session != null) ? (User) session.getAttribute("staff") : null;
         if (staff == null) {
-            res.sendRedirect(loginURL);
+            res.sendRedirect(contextPath + "/faces/views/auth/login.xhtml");
             return;
         }
 

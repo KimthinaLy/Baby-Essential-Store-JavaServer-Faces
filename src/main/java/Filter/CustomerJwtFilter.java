@@ -47,11 +47,11 @@ public class CustomerJwtFilter implements Filter {
             }
         }
 
-        boolean isPublicStorePage = requestURI.contains("product.xhtml")
+       boolean isPublicStorePage = requestURI.contains("login.xhtml")
+                || requestURI.contains("register.xhtml")
+                || requestURI.contains("product.xhtml")
                 || requestURI.contains("index.xhtml")
-                || requestURI.contains("cart.xhtml")
-                || requestURI.contains("order-history.xhtml")
-                || requestURI.equals(contextPath + "/");
+                || requestURI.contains("cart.xhtml");
                 
 
         if (isPublicStorePage) {

@@ -30,6 +30,7 @@ import org.primefaces.model.file.UploadedFile;
 @Named("productBean")
 @SessionScoped
 public class ProductBean implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     final private ProductDAO productDAO = new ProductDAOImpl();
     final private CategoryDAO categoryDAO = new CategoryDAOImpl();

@@ -21,6 +21,7 @@ import model.User;
 @Named
 @SessionScoped
 public class AddressBean implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Address address = new Address();
     private AddressDAO addressDAO = new AddressDAOImpl();
 

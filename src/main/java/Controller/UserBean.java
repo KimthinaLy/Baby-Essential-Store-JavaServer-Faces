@@ -26,6 +26,7 @@ import model.User;
 @Named
 @SessionScoped
 public class UserBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<User> users;
     private List<User> selectedUsers;
     private User user;
