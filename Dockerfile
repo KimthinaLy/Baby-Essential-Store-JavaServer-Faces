@@ -11,7 +11,8 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # --- STAGE 2: Run the application on GlassFish 8 ---
-FROM glassfish:8.0.0-jdk21
+#FROM glassfish:8.0.0-jdk2: on Docker Hub
+FROM ghcr.io/eclipse-ee4j/glassfish:8.0.0
 
 # Set GlassFish environment variables
 ENV GLASSFISH_HOME=/jakartaee/glassfish
