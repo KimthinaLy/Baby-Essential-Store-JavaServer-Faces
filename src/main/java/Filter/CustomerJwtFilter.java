@@ -23,6 +23,7 @@ import util.UtilJwt;
  * @author Admin
  */
 
+/*
 @WebFilter("/views/customer/*")
 public class CustomerJwtFilter implements Filter {
 
@@ -69,3 +70,4 @@ public class CustomerJwtFilter implements Filter {
         }
     }
 }
+*/
