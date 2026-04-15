@@ -23,7 +23,7 @@ import util.UtilJwt;
  * @author Admin
  */
 
-@WebFilter("views/customer/*")
+@WebFilter("/views/customer/*")
 public class CustomerJwtFilter implements Filter {
 
     @Inject
@@ -65,7 +65,7 @@ public class CustomerJwtFilter implements Filter {
         if (claims != null) {
             chain.doFilter(request, response);
         } else {
-            res.sendRedirect(req.getContextPath() + "views/customer/login.xhtml");
+            res.sendRedirect(req.getContextPath() + "/views/customer/login.xhtml");
         }
     }
 }
