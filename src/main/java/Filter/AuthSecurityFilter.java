@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import model.User;
 import java.io.IOException;
 
+/*
 @WebFilter("/*")
 public class AuthSecurityFilter implements Filter {
 
@@ -76,3 +77,4 @@ public class AuthSecurityFilter implements Filter {
         chain.doFilter(request, response);
     }
 }
+*/
