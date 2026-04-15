@@ -18,6 +18,8 @@ FROM ghcr.io/eclipse-ee4j/glassfish:8.0.0
 ENV GLASSFISH_HOME=/jakartaee/glassfish
 ENV DEPLOY_DIR=${GLASSFISH_HOME}/glassfish/domains/domain1/autodeploy
 
+# Render provides a PORT env var, so we use it
+ENV PORT=8080
 # Remove default GlassFish apps to keep it clean
 RUN rm -rf ${DEPLOY_DIR}/*
 
@@ -26,7 +28,8 @@ RUN rm -rf ${DEPLOY_DIR}/*
 COPY --from=build /app/target/JSF_BabyEssential-1.0-SNAPSHOT.war ${DEPLOY_DIR}/ROOT.war
 
 # Expose the standard HTTP port
-EXPOSE 8080
+EXPOSE ${PORT}
+
 
 # Start GlassFish in verbose mode so we can see logs in the cloud dashboard
 CMD ["asadmin", "start-domain", "-v"]
