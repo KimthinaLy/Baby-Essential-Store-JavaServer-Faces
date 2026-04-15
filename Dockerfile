@@ -32,4 +32,4 @@ EXPOSE ${PORT}
 
 
 # Start GlassFish domain, binding to the PORT
-CMD ["asadmin", "start-domain", "--verbose", "--port", "${PORT}"]
+CMD asadmin start-domain --verbose --port $PORT
