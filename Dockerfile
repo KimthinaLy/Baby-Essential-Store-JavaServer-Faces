@@ -31,5 +31,5 @@ COPY --from=build /app/target/JSF_BabyEssential-1.0-SNAPSHOT.war ${DEPLOY_DIR}/R
 EXPOSE ${PORT}
 
 
-# Start GlassFish in verbose mode so we can see logs in the cloud dashboard
-CMD ["asadmin", "start-domain", "-v"]
+# Start GlassFish domain, binding to the PORT
+CMD ["asadmin", "start-domain", "--verbose", "--port", "${PORT}"]
