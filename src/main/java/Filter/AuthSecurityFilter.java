@@ -42,8 +42,7 @@ public class AuthSecurityFilter implements Filter {
         boolean isPublicPage = isLoginPage 
                 || requestURI.endsWith("index.xhtml")
                 || requestURI.contains("/auth/")
-                || requestURI.equals(contextPath + "/")
-                || requestURI.equals(contextPath + "/faces/");
+                || requestURI.equals(contextPath + "/");
         
         boolean isCustomerPath = requestURI.contains("/customer/");
 
@@ -55,7 +54,7 @@ public class AuthSecurityFilter implements Filter {
         HttpSession session = req.getSession(false);
         User staff = (session != null) ? (User) session.getAttribute("staff") : null;
         if (staff == null) {
-            res.sendRedirect(contextPath + "/faces/views/auth/login.xhtml");
+            res.sendRedirect(contextPath + "/views/auth/login.xhtml");
             return;
         }
 
