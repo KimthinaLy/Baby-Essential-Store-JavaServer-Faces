@@ -25,7 +25,7 @@ import model.User;
 public class UtilJwt implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    private final String JWT_SECRET = "JSFSuperSecretBabyStoreKey2026_Secure"; 
+    private final String JWT_SECRET = System.getenv("JWT_SECRET"); 
     private SecretKey KEY;
 
 

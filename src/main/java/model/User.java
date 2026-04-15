@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
+import jakarta.validation.constraints.*;
 
 /**
  *
@@ -10,9 +11,17 @@ package model;
  */
 public class User {
     private int userId;
+    @NotBlank(message = "Full name is required")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
+    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Name must not contain numbers or special characters")
     private String fullName;
+    
+    @Email(message = "Please provide a valid email address")
     private String email;
+    
     private String password;
+    
+    @Pattern(regexp = "^\\(\\d{3}\\) \\d{3}-\\d{4}$", message = "Invalid phone format")
     private String phone;
     private String role;
 
